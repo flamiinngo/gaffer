@@ -1,124 +1,120 @@
 {
-  "manager": "0xCE49D9de663ce868Ce1FF61E8Ed360844df34ad3",
-  "managerName": "The Catenaccio Kid",
-  "matchId": 15186827,
-  "match": "New Zealand vs Egypt",
-  "home": {
-    "name": "New Zealand",
-    "flag": "🇳🇿",
-    "id": 4784
-  },
-  "away": {
-    "name": "Egypt",
-    "flag": "🇪🇬",
-    "id": 4758
-  },
-  "score": "1-3",
+  "managerName": "Total Attack",
+  "match": "Matchday 2",
+  "score": "17 games",
   "formation": "4-3-3",
-  "captain": "Chris Wood",
-  "reasoning": "Captain Chris Wood due to his goal-scoring prowess and leadership qualities.",
+  "captain": "Lionel Messi",
+  "reasoning": "Lionel Messi is one of the most talented and prolific forwards in world football, capable of scoring goals and creating opportunities for his teammates.",
   "xi": [
     {
-      "name": "Alex Paulsen",
+      "name": "Eloy Room",
       "pos": "GK",
-      "team": "New Zealand",
-      "flag": "🇳🇿",
-      "points": -1,
+      "team": "Curaçao",
+      "flag": "🇨🇼",
+      "rating": 10,
+      "points": 11,
       "captain": false
     },
     {
-      "name": "Tim Payne",
+      "name": "Denzel Dumfries",
       "pos": "DEF",
-      "team": "New Zealand",
-      "flag": "🇳🇿",
-      "points": 4,
+      "team": "Netherlands",
+      "flag": "🇳🇱",
+      "rating": 8.8,
+      "points": 8,
       "captain": false
     },
     {
-      "name": "Tyler Bindon",
+      "name": "Juan Cáceres",
       "pos": "DEF",
-      "team": "New Zealand",
-      "flag": "🇳🇿",
-      "points": 0,
+      "team": "Paraguay",
+      "flag": "🇵🇾",
+      "rating": 8.2,
+      "points": 6,
       "captain": false
     },
     {
-      "name": "Michael Boxall",
+      "name": "Richie Laryea",
       "pos": "DEF",
-      "team": "New Zealand",
-      "flag": "🇳🇿",
-      "points": 1,
+      "team": "Canada",
+      "flag": "🇨🇦",
+      "rating": 8.8,
+      "points": 6,
       "captain": false
     },
     {
-      "name": "Francis De Vries",
+      "name": "Alistair Johnston",
       "pos": "DEF",
-      "team": "New Zealand",
-      "flag": "🇳🇿",
-      "points": 0,
+      "team": "Canada",
+      "flag": "🇨🇦",
+      "rating": 8.6,
+      "points": 6,
       "captain": false
     },
     {
-      "name": "Elijah Just",
+      "name": "Mohamed Salah",
       "pos": "MID",
-      "team": "New Zealand",
-      "flag": "🇳🇿",
-      "points": 2,
-      "captain": false
-    },
-    {
-      "name": "Sarpreet Singh",
-      "pos": "MID",
-      "team": "New Zealand",
-      "flag": "🇳🇿",
-      "points": 2,
-      "captain": false
-    },
-    {
-      "name": "Liberato Cacace",
-      "pos": "MID",
-      "team": "New Zealand",
-      "flag": "🇳🇿",
-      "points": 2,
-      "captain": false
-    },
-    {
-      "name": "Omar Marmoush",
-      "pos": "FWD",
       "team": "Egypt",
       "flag": "🇪🇬",
-      "points": 2,
+      "rating": 8.6,
+      "points": 10,
       "captain": false
     },
     {
-      "name": "Hamza Abdelkarim",
-      "pos": "FWD",
-      "team": "Egypt",
-      "flag": "🇪🇬",
-      "points": 1,
+      "name": "Rubén Vargas",
+      "pos": "MID",
+      "team": "Switzerland",
+      "flag": "🇨🇭",
+      "rating": 8.4,
+      "points": 9,
       "captain": false
     },
     {
-      "name": "Chris Wood",
+      "name": "Stephen Eustaquio",
+      "pos": "MID",
+      "team": "Canada",
+      "flag": "🇨🇦",
+      "rating": 8.6,
+      "points": 3,
+      "captain": false
+    },
+    {
+      "name": "Ayase Ueda",
       "pos": "FWD",
-      "team": "New Zealand",
-      "flag": "🇳🇿",
-      "points": 4,
+      "team": "Japan",
+      "flag": "🇯🇵",
+      "rating": 9.6,
+      "points": 13,
+      "captain": false
+    },
+    {
+      "name": "Lionel Messi",
+      "pos": "FWD",
+      "team": "Argentina",
+      "flag": "🇦🇷",
+      "rating": 9.2,
+      "points": 20,
       "captain": true
+    },
+    {
+      "name": "Cody Gakpo",
+      "pos": "FWD",
+      "team": "Netherlands",
+      "flag": "🇳🇱",
+      "rating": 9.5,
+      "points": 13,
+      "captain": false
     }
   ],
-  "totalPoints": 17,
+  "totalPoints": 105,
   "model": "qwen/qwen2.5-omni-7b",
-  "ts": "2026-06-22T10:55:31.774Z",
-  "contestId": 3,
-  "decisionRoot": "0xe70e3cefc2e1c4fbd267bf1a5ee42f981fd262f7cb21ed585135b77d07e52dcb",
-  "configRoot": "0xf3ae887c68da94b3960a534c4905eccd4791403c2129077e2ef09bd4bd7db703",
-  "contract": "0x42567B7FE168ff2509658Be72697e0277050306C",
+  "contestId": 6,
+  "decisionRoot": "0x69e3dccfadeafaf0027985a9ea60292800f3bfb90356e134b26f55485afdcc8a",
   "onchain": {
-    "totalPoints": 17,
+    "totalPoints": 105,
     "overrideCount": 0,
     "multiplier": 3,
-    "effectiveScore": 51
+    "effectiveScore": 315
   },
-  "updatedAt": "2026-06-22T11:02:37.349Z"
+  "updatedAt": "2026-06-22T22:43:33.558Z"
 }

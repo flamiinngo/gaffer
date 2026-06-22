@@ -58,6 +58,7 @@ for (const addr of participants) {
     name: decision?.managerName ?? "Unknown gaffer",
     captain: decision?.captain ?? "—",
     reasoning: decision?.reasoning ?? "",
+    model: decision?.model ?? "0G Compute",
     xi: decision?.xi ?? [],
     points: Number(m[1]),
     overrideCount: Number(m[2]),
@@ -84,4 +85,25 @@ const out = {
   updatedAt: new Date().toISOString(),
 };
 writeFileSync(join(here, "..", "frontend", "public", "leaderboard.json"), JSON.stringify(out, null, 2));
+
+// dashboard snapshot from the King (keeps the live pitch in sync with the leaderboard)
+if (king) {
+  const snapshot = {
+    managerName: king.name,
+    match: `Matchday ${featured.matchId}`,
+    score: featured.score,
+    formation: "4-3-3",
+    captain: king.captain,
+    reasoning: king.reasoning,
+    xi: king.xi,
+    totalPoints: king.points,
+    model: king.model,
+    contestId: id,
+    decisionRoot: king.decisionRoot,
+    onchain: { totalPoints: king.points, overrideCount: king.overrideCount, multiplier: king.multiplier, effectiveScore: king.effectiveScore },
+    updatedAt: new Date().toISOString(),
+  };
+  writeFileSync(join(here, "..", "frontend", "public", "gaffer-latest.json"), JSON.stringify(snapshot, null, 2));
+  console.log("wrote gaffer-latest.json (King:", king.name + ")");
+}
 console.log(`✅ leaderboard.json — ${rows.length} gaffers, king: ${king?.name} (${king?.effectiveScore} eff)`);
