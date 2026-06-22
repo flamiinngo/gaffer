@@ -5,6 +5,7 @@ export const OG_RPC_URL =
   process.env.NEXT_PUBLIC_OG_RPC_URL ?? "https://evmrpc-testnet.0g.ai";
 export const EXPLORER_URL =
   process.env.NEXT_PUBLIC_OG_EXPLORER ?? "https://chainscan-galileo.0g.ai";
+export const GITHUB_URL = "https://github.com/flamiinngo/gaffer";
 
 export const ogGalileo = defineChain({
   id: 16602,

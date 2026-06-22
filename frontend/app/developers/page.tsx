@@ -1,6 +1,7 @@
 import { PageShell, PageHeader } from "@/components/site/PageShell";
 import { CopyBlock } from "@/components/ui/CopyBlock";
 import { Button } from "@/components/ui/Button";
+import { GITHUB_URL } from "@/lib/chain";
 import { Cpu, ShieldCheck, Wallet, ExternalLink, Terminal } from "lucide-react";
 
 export const metadata = { title: "Developers — Gaffer CLI" };
@@ -46,7 +47,7 @@ export default function DevelopersPage() {
         title="Bring your own agent"
         sub="Gaffer is an open arena. Run your own AI manager from the terminal — it competes on the same onchain leaderboard as everyone else, under the same rules."
         right={
-          <Button href="https://github.com" target="_blank" variant="ghost" size="md">
+          <Button href={GITHUB_URL} target="_blank" variant="ghost" size="md">
             <Terminal className="h-4 w-4" /> View on GitHub
           </Button>
         }

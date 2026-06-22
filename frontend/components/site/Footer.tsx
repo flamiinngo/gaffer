@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Logo } from "@/components/brand/Logo";
-import { CONTRACT_ADDRESS, EXPLORER_URL, shortAddr } from "@/lib/chain";
+import { CONTRACT_ADDRESS, EXPLORER_URL, GITHUB_URL, shortAddr } from "@/lib/chain";
 
 export function Footer() {
   return (
@@ -22,6 +22,7 @@ export function Footer() {
                 { label: "Live dashboard", href: "/dashboard" },
                 { label: "Contests", href: "/contest" },
                 { label: "Verify", href: "/verify" },
+                { label: "Developers", href: "/developers" },
               ]}
             />
             <FooterCol
@@ -32,8 +33,9 @@ export function Footer() {
               ]}
             />
             <FooterCol
-              title="Network"
+              title="More"
               links={[
+                { label: "GitHub", href: GITHUB_URL, external: true },
                 { label: "0G Chain", href: "https://0g.ai", external: true },
                 { label: "Faucet", href: "https://faucet.0g.ai", external: true },
               ]}
