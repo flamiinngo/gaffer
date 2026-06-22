@@ -1,0 +1,115 @@
+/** Minimal typed ABI for the deployed ManagerAI contract (the parts the app uses). */
+export const managerAiAbi = [
+  {
+    type: "function",
+    name: "nextContestId",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "getContest",
+    stateMutability: "view",
+    inputs: [{ name: "contestId", type: "uint256" }],
+    outputs: [
+      { name: "id", type: "uint256" },
+      { name: "name", type: "string" },
+      { name: "prizePool", type: "uint256" },
+      { name: "entryFee", type: "uint256" },
+      { name: "startTime", type: "uint256" },
+      { name: "endTime", type: "uint256" },
+      { name: "resolved", type: "bool" },
+      { name: "participantCount", type: "uint256" },
+    ],
+  },
+  {
+    type: "function",
+    name: "getParticipants",
+    stateMutability: "view",
+    inputs: [{ name: "contestId", type: "uint256" }],
+    outputs: [{ type: "address[]" }],
+  },
+  {
+    type: "function",
+    name: "getManager",
+    stateMutability: "view",
+    inputs: [
+      { name: "contestId", type: "uint256" },
+      { name: "owner", type: "address" },
+    ],
+    outputs: [
+      { name: "configHash", type: "string" },
+      { name: "totalPoints", type: "uint256" },
+      { name: "overrideCount", type: "uint256" },
+      { name: "multiplier", type: "uint256" },
+      { name: "effectiveScore", type: "uint256" },
+      { name: "entryTime", type: "uint256" },
+      { name: "active", type: "bool" },
+    ],
+  },
+  {
+    type: "function",
+    name: "enterContest",
+    stateMutability: "payable",
+    inputs: [
+      { name: "contestId", type: "uint256" },
+      { name: "configHash", type: "string" },
+    ],
+    outputs: [],
+  },
+  {
+    type: "function",
+    name: "updateConfig",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "contestId", type: "uint256" },
+      { name: "configHash", type: "string" },
+    ],
+    outputs: [],
+  },
+  {
+    type: "function",
+    name: "claim",
+    stateMutability: "nonpayable",
+    inputs: [],
+    outputs: [],
+  },
+  {
+    type: "function",
+    name: "pendingWithdrawals",
+    stateMutability: "view",
+    inputs: [{ type: "address" }],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "event",
+    name: "ManagerEntered",
+    inputs: [
+      { name: "contestId", type: "uint256", indexed: true },
+      { name: "owner", type: "address", indexed: true },
+      { name: "configHash", type: "string", indexed: false },
+      { name: "entryFee", type: "uint256", indexed: false },
+    ],
+  },
+  {
+    type: "event",
+    name: "PointsRecorded",
+    inputs: [
+      { name: "contestId", type: "uint256", indexed: true },
+      { name: "owner", type: "address", indexed: true },
+      { name: "matchId", type: "uint256", indexed: true },
+      { name: "points", type: "uint256", indexed: false },
+      { name: "decisionHash", type: "string", indexed: false },
+    ],
+  },
+  {
+    type: "event",
+    name: "OverrideRecorded",
+    inputs: [
+      { name: "contestId", type: "uint256", indexed: true },
+      { name: "owner", type: "address", indexed: true },
+      { name: "newOverrideCount", type: "uint256", indexed: false },
+    ],
+  },
+] as const;

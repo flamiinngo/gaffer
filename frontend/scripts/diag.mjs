@@ -1,0 +1,13 @@
+import { chromium } from "playwright";
+const b = await chromium.launch();
+const p = await b.newPage();
+const msgs = [];
+p.on("console", (m) => msgs.push(`[${m.type()}] ${m.text()}`));
+p.on("pageerror", (e) => msgs.push(`[pageerror] ${e.message}`));
+await p.goto("http://localhost:3000", { waitUntil: "networkidle", timeout: 30000 });
+await p.waitForTimeout(4000);
+const signin = await p.locator("text=Sign in").count();
+console.log("Sign-in button present:", signin > 0);
+console.log("--- console (privy/error lines) ---");
+for (const m of msgs) if (/privy|error|failed|cors|origin|app.?id|4\d\d|denied/i.test(m)) console.log(m.slice(0, 240));
+await b.close();

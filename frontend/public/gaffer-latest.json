@@ -1,0 +1,124 @@
+{
+  "manager": "0xCE49D9de663ce868Ce1FF61E8Ed360844df34ad3",
+  "managerName": "The Catenaccio Kid",
+  "matchId": 15186827,
+  "match": "New Zealand vs Egypt",
+  "home": {
+    "name": "New Zealand",
+    "flag": "🇳🇿",
+    "id": 4784
+  },
+  "away": {
+    "name": "Egypt",
+    "flag": "🇪🇬",
+    "id": 4758
+  },
+  "score": "1-3",
+  "formation": "4-3-3",
+  "captain": "Chris Wood",
+  "reasoning": "Captain Chris Wood due to his goal-scoring prowess and leadership qualities.",
+  "xi": [
+    {
+      "name": "Alex Paulsen",
+      "pos": "GK",
+      "team": "New Zealand",
+      "flag": "🇳🇿",
+      "points": -1,
+      "captain": false
+    },
+    {
+      "name": "Tim Payne",
+      "pos": "DEF",
+      "team": "New Zealand",
+      "flag": "🇳🇿",
+      "points": 4,
+      "captain": false
+    },
+    {
+      "name": "Tyler Bindon",
+      "pos": "DEF",
+      "team": "New Zealand",
+      "flag": "🇳🇿",
+      "points": 0,
+      "captain": false
+    },
+    {
+      "name": "Michael Boxall",
+      "pos": "DEF",
+      "team": "New Zealand",
+      "flag": "🇳🇿",
+      "points": 1,
+      "captain": false
+    },
+    {
+      "name": "Francis De Vries",
+      "pos": "DEF",
+      "team": "New Zealand",
+      "flag": "🇳🇿",
+      "points": 0,
+      "captain": false
+    },
+    {
+      "name": "Elijah Just",
+      "pos": "MID",
+      "team": "New Zealand",
+      "flag": "🇳🇿",
+      "points": 2,
+      "captain": false
+    },
+    {
+      "name": "Sarpreet Singh",
+      "pos": "MID",
+      "team": "New Zealand",
+      "flag": "🇳🇿",
+      "points": 2,
+      "captain": false
+    },
+    {
+      "name": "Liberato Cacace",
+      "pos": "MID",
+      "team": "New Zealand",
+      "flag": "🇳🇿",
+      "points": 2,
+      "captain": false
+    },
+    {
+      "name": "Omar Marmoush",
+      "pos": "FWD",
+      "team": "Egypt",
+      "flag": "🇪🇬",
+      "points": 2,
+      "captain": false
+    },
+    {
+      "name": "Hamza Abdelkarim",
+      "pos": "FWD",
+      "team": "Egypt",
+      "flag": "🇪🇬",
+      "points": 1,
+      "captain": false
+    },
+    {
+      "name": "Chris Wood",
+      "pos": "FWD",
+      "team": "New Zealand",
+      "flag": "🇳🇿",
+      "points": 4,
+      "captain": true
+    }
+  ],
+  "totalPoints": 17,
+  "model": "qwen/qwen2.5-omni-7b",
+  "ts": "2026-06-22T10:55:31.774Z",
+  "contestId": 3,
+  "decisionRoot": "0xe70e3cefc2e1c4fbd267bf1a5ee42f981fd262f7cb21ed585135b77d07e52dcb",
+  "configRoot": "0xf3ae887c68da94b3960a534c4905eccd4791403c2129077e2ef09bd4bd7db703",
+  "contract": "0x42567B7FE168ff2509658Be72697e0277050306C",
+  "onchain": {
+    "totalPoints": 17,
+    "overrideCount": 0,
+    "multiplier": 3,
+    "effectiveScore": 51
+  },
+  "updatedAt": "2026-06-22T11:02:37.349Z"
+}

@@ -1,0 +1,271 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ */
+/*  ManagerAI design system — premium sports intelligence, onchain.    */
+/* ------------------------------------------------------------------ */
+
+@theme {
+  /* Brand palette */
+  --color-pitch: #0a1628; /* deep navy — night-stadium background */
+  --color-pitch-2: #07101d; /* darker navy for depth layers */
+  --color-grass: #00c853; /* electric green — wins, live, primary accent */
+  --color-grass-dim: #00a344;
+  --color-gold: #ffb700; /* championship gold — multiplier, top rank */
+  --color-chalk: #f0f4ff; /* near-white, blue tint — primary text */
+  --color-midfield: #1a2744; /* mid-navy — cards, panels */
+  --color-midfield-2: #16213c; /* slightly deeper panel */
+  --color-line: #2a3a5c; /* blue-grey — borders, dividers */
+  --color-danger: #ff3b5c; /* red — losses, overrides, penalties */
+  --color-data: #7b8fbf; /* muted blue — secondary text, labels */
+
+  /* Typography */
+  --font-display: var(--font-bebas);
+  --font-body: var(--font-inter);
+  --font-mono: var(--font-jetbrains);
+
+  /* Radii — 4 data, 12 cards, 24 modals */
+  --radius-data: 4px;
+  --radius-card: 12px;
+  --radius-modal: 24px;
+
+  /* Motion */
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Custom animations */
+  --animate-pulse-grass: pulse-grass 1.6s var(--ease-out-quint) infinite;
+  --animate-flash-danger: flash-danger 0.9s ease-out;
+  --animate-shimmer: shimmer 1.4s linear infinite;
+  --animate-rise: rise 0.6s var(--ease-out-quint) both;
+  --animate-ticker: ticker 0.5s var(--ease-out-quint);
+}
+
+@keyframes pulse-grass {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 200, 83, 0.55);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(0, 200, 83, 0);
+  }
+}
+
+@keyframes flash-danger {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 59, 92, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 0 14px rgba(255, 59, 92, 0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ticker {
+  from {
+    transform: translateY(-0.4em);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Base                                                               */
+/* ------------------------------------------------------------------ */
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  border-color: var(--color-line);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-pitch);
+  color: var(--color-chalk);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* The signature night-stadium backdrop: layered radial glows + grain. */
+.stadium-bg {
+  position: relative;
+  background-color: var(--color-pitch);
+  background-image:
+    radial-gradient(1200px 600px at 50% -10%, rgba(0, 200, 83, 0.1), transparent 60%),
+    radial-gradient(900px 500px at 12% 8%, rgba(123, 143, 191, 0.08), transparent 55%),
+    radial-gradient(900px 500px at 88% 12%, rgba(255, 183, 0, 0.06), transparent 55%);
+}
+
+.stadium-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+/* Display headline helper */
+.display {
+  font-family: var(--font-display), "Arial Narrow", sans-serif;
+  letter-spacing: 0.01em;
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+
+.mono {
+  font-family: var(--font-mono), ui-monospace, monospace;
+}
+
+/* Card primitive — crafted, with a lit top edge, depth gradient and soft shadow */
+.card {
+  position: relative;
+  isolation: isolate;
+  background-image: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-midfield) 92%, white 8%) 0%,
+    var(--color-midfield) 38%,
+    var(--color-midfield-2) 100%
+  );
+  border: 1px solid color-mix(in srgb, var(--color-line) 88%, white 12%);
+  border-radius: var(--radius-card);
+  box-shadow:
+    inset 0 1px 0 0 rgba(240, 244, 255, 0.05),
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 12px 30px -16px rgba(0, 0, 0, 0.7);
+  transition:
+    box-shadow 0.3s var(--ease-out-quint),
+    border-color 0.3s var(--ease-out-quint),
+    transform 0.3s var(--ease-out-quint);
+}
+
+/* hairline grass accent that fades in on hover */
+.card-hover::after {
+  content: "";
+  position: absolute;
+  inset-inline: 12%;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-grass), transparent);
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-out-quint);
+  z-index: 1;
+}
+
+.card-hover:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--color-grass) 45%, var(--color-line));
+  box-shadow:
+    inset 0 1px 0 0 rgba(0, 200, 83, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 22px 48px -20px rgba(0, 0, 0, 0.8),
+    0 0 36px -8px rgba(0, 200, 83, 0.18);
+}
+
+.card-hover:hover::after {
+  opacity: 0.9;
+}
+
+/* Skeleton shimmer */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-midfield) 0%,
+    var(--color-midfield-2) 50%,
+    var(--color-midfield) 100%
+  );
+  background-size: 200% 100%;
+  animation: var(--animate-shimmer);
+  border-radius: var(--radius-data);
+}
+
+/* Selection */
+::selection {
+  background: rgba(0, 200, 83, 0.3);
+  color: var(--color-chalk);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-pitch-2);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-line);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-data);
+}
+
+/* Range slider — grass thumb, lit track */
+input[type="range"].slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--color-line);
+  outline: none;
+}
+input[type="range"].slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: var(--color-grass);
+  border: 3px solid var(--color-pitch);
+  box-shadow: 0 0 0 1px var(--color-grass), 0 0 14px rgba(0, 200, 83, 0.5);
+  cursor: pointer;
+  transition: transform 0.15s var(--ease-out-quint);
+}
+input[type="range"].slider::-webkit-slider-thumb:hover {
+  transform: scale(1.12);
+}
+input[type="range"].slider::-moz-range-thumb {
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  background: var(--color-grass);
+  border: 3px solid var(--color-pitch);
+  box-shadow: 0 0 14px rgba(0, 200, 83, 0.5);
+  cursor: pointer;
+}
+
+/* Focus ring — deliberate, accessible */
+:focus-visible {
+  outline: 2px solid var(--color-grass);
+  outline-offset: 2px;
+  border-radius: 2px;
+}

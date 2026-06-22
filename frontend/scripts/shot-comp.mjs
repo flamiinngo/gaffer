@@ -1,0 +1,10 @@
+import { chromium } from "playwright";
+const b = await chromium.launch();
+const p = await (await b.newContext({ viewport:{width:1440,height:900}, deviceScaleFactor:2 })).newPage();
+await p.goto("http://localhost:3000", { waitUntil:"networkidle", timeout:30000 });
+await p.waitForTimeout(2500);
+const el = p.locator("section", { hasText: "Live leaderboard" }).first();
+await el.scrollIntoViewIfNeeded();
+await el.screenshot({ path: "C:/Users/eobi6/zerocup/frontend/.shots/competition.png" });
+console.log("ok");
+await b.close();

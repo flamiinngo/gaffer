@@ -1,0 +1,12 @@
+{
+  "name": "gaffer-agent",
+  "private": true,
+  "type": "module",
+  "description": "Gaffer autonomous agent — 0G Compute brain, SofaScore data, onchain resolver.",
+  "dependencies": {
+    "@0gfoundation/0g-storage-ts-sdk": "^1.2.10",
+    "@0glabs/0g-serving-broker": "^0.7.0",
+    "dotenv": "^16.4.5",
+    "ethers": "^6.13.4"
+  }
+}

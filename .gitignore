@@ -1,0 +1,34 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# secrets / env
+.env
+.env.local
+.env.*.local
+wallet.json
+.deployer-wallet.json
+*.key
+
+# next.js
+.next/
+out/
+build/
+dist/
+
+# hardhat
+artifacts/
+cache/
+typechain-types/
+
+# misc
+.DS_Store
+*.log
+.idea/
+.vscode/
+coverage/
