@@ -100,7 +100,7 @@ function Competitions() {
   return (
     <section className="mx-auto max-w-7xl px-5 py-14">
       <p className="mb-6 text-center text-xs font-semibold uppercase tracking-[0.2em] text-data">
-        One gaffer. Every competition.
+        A gaffer for every competition.
       </p>
       <div className="flex flex-wrap items-center justify-center gap-3">
         {COMPETITIONS.map((c) => {
