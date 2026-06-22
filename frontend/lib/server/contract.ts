@@ -160,6 +160,11 @@ export async function readUserGaffers(address: `0x${string}`): Promise<UserGaffe
   return out.sort((a, b) => b.contestId - a.contestId);
 }
 
+/** Stale/duplicate contests hidden from the browse list (the contract can't delete; curated for clarity). */
+const HIDDEN_CONTEST_IDS = new Set(
+  (process.env.HIDDEN_CONTESTS ?? "1,2,3,5,6,7").split(",").map((s) => Number(s.trim())).filter((n) => n > 0)
+);
+
 export async function readAllContests(): Promise<ContestSummary[]> {
   const next = await publicClient.readContract({
     address: CONTRACT_ADDRESS,
@@ -179,18 +184,21 @@ export async function readAllContests(): Promise<ContestSummary[]> {
     )
   );
 
-  return results.map((c) => {
-    const [id, name, prizePool, entryFee, startTime, endTime, resolved, participantCount] = c;
-    return {
-      id: Number(id),
-      name,
-      prizePoolOG: formatEther(prizePool),
-      entryFeeOG: formatEther(entryFee),
-      startTime: Number(startTime),
-      endTime: Number(endTime),
-      resolved,
-      participantCount: Number(participantCount),
-      status: statusOf(Number(startTime), Number(endTime), resolved),
-    } satisfies ContestSummary;
-  });
+  return results
+    .map((c) => {
+      const [id, name, prizePool, entryFee, startTime, endTime, resolved, participantCount] = c;
+      return {
+        id: Number(id),
+        name,
+        prizePoolOG: formatEther(prizePool),
+        entryFeeOG: formatEther(entryFee),
+        startTime: Number(startTime),
+        endTime: Number(endTime),
+        resolved,
+        participantCount: Number(participantCount),
+        status: statusOf(Number(startTime), Number(endTime), resolved),
+      } satisfies ContestSummary;
+    })
+    .filter((c) => !HIDDEN_CONTEST_IDS.has(c.id))
+    .sort((a, b) => b.id - a.id);
 }
