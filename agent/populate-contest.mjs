@@ -40,9 +40,9 @@ const ABI = [
 const adminContract = new ethers.Contract(dep.address, ABI, admin);
 
 const GAFFERS = [
-  { name: "Total Attack", strat: "ultra-attacking: load up on the highest-ceiling forwards and attacking midfielders across all nations", overrides: 0 },
-  { name: "The Catenaccio Kid", strat: "defensive masterclass: the best goalkeeper and defenders from teams that kept clean sheets", overrides: 1 },
-  { name: "Moneyball", strat: "form and value: the highest-rated performers of the matchday regardless of fame", overrides: 2 },
+  { name: "Total Attack", strat: "ultra-attacking: load up on the highest-ceiling forwards and attacking midfielders across all nations. Use an attacking 3-4-3 formation.", overrides: 0 },
+  { name: "The Catenaccio Kid", strat: "defensive masterclass: the best goalkeeper and defenders from teams that kept clean sheets. Use a solid 5-3-2 formation.", overrides: 1 },
+  { name: "Moneyball", strat: "form and value: the highest-rated performers of the matchday regardless of fame. Use a balanced 4-4-2 formation.", overrides: 2 },
 ];
 
 async function sofa(path) {
@@ -104,9 +104,12 @@ async function buildMatchday() {
   return { matches: matches.length, pool: trimmed, stats };
 }
 
+// Valid FPL formations (outfield DEF-MID-FWD; GK is always 1).
+const FORMATIONS = { "4-3-3": [4, 3, 3], "4-4-2": [4, 4, 2], "3-5-2": [3, 5, 2], "3-4-3": [3, 4, 3], "4-5-1": [4, 5, 1], "5-3-2": [5, 3, 2], "5-4-1": [5, 4, 1] };
+
 async function pickXI(broker, prov, endpoint, model, pool, strat) {
-  const sys = `You are an elite AI fantasy football manager. Strategy: ${strat}. From the matchday pool of players from MANY national teams, pick a valid 4-3-3 fantasy XI (1 GK,4 DEF,3 MID,3 FWD) — mix nations freely. Captain your best pick.`;
-  const user = `MATCHDAY POOL (name | pos | team):\n${pool.map((p) => `${p.name} | ${p.pos} | ${p.team}`).join("\n")}\n\nReturn ONLY JSON {"captain":"","reasoning":"<2 sentences>","xi":[{"name":"","pos":""}]} with 1 GK,4 DEF,3 MID,3 FWD.`;
+  const sys = `You are an elite AI fantasy football manager. Strategy: ${strat}. Choose ONE formation from: ${Object.keys(FORMATIONS).join(", ")}. Pick a starting XI matching it (always exactly 1 GK) from the matchday pool — mix nations freely. Also name a 4-player bench (1 GK + 3 outfield). Captain your best pick.`;
+  const user = `MATCHDAY POOL (name | pos | team):\n${pool.map((p) => `${p.name} | ${p.pos} | ${p.team}`).join("\n")}\n\nReturn ONLY JSON {"formation":"4-4-2","captain":"","reasoning":"<2 sentences>","xi":[{"name":"","pos":""}],"bench":[{"name":"","pos":""}]}.`;
   let content = "";
   for (let a = 0; a < 3; a++) {
     try {
@@ -115,14 +118,23 @@ async function pickXI(broker, prov, endpoint, model, pool, strat) {
       if (res.ok) { content = (await res.json()).choices?.[0]?.message?.content ?? ""; if (content) break; }
     } catch {} await delay(2000);
   }
-  const m = content.match(/\{[\s\S]*\}/); const parsed = m ? JSON.parse(m[0]) : { xi: [], captain: "", reasoning: "" };
-  const need = { GK: 1, DEF: 4, MID: 3, FWD: 3 }, byPos = { GK: [], DEF: [], MID: [], FWD: [] }, used = new Set();
+  const m = content.match(/\{[\s\S]*\}/); const parsed = m ? JSON.parse(m[0]) : {};
+  let f = String(parsed.formation || "4-3-3").trim();
+  if (!FORMATIONS[f]) f = "4-3-3";
+  const [D, M, F] = FORMATIONS[f];
+  const need = { GK: 1, DEF: D, MID: M, FWD: F };
+  const byPos = { GK: [], DEF: [], MID: [], FWD: [] }, used = new Set();
   const find = (nm) => pool.find((p) => norm(p.name) === norm(nm || ""));
   for (const pk2 of parsed.xi ?? []) { const pl = find(pk2.name); if (pl && !used.has(pl.name) && byPos[pl.pos].length < need[pl.pos]) { byPos[pl.pos].push(pl); used.add(pl.name); } }
   for (const pos of Object.keys(need)) for (const p of pool.filter((x) => x.pos === pos && !used.has(x.name))) { if (byPos[pos].length >= need[pos]) break; byPos[pos].push(p); used.add(p.name); }
   const xi = [...byPos.GK, ...byPos.DEF, ...byPos.MID, ...byPos.FWD];
-  const captain = parsed.captain && find(parsed.captain) && used.has(find(parsed.captain).name) ? find(parsed.captain).name : byPos.FWD[0]?.name;
-  return { xi, captain, reasoning: parsed.reasoning || strat };
+  // bench: 1 GK + 3 outfield, preferring the AI's choices
+  const bench = []; let needGk = 1, needOut = 3;
+  for (const pk2 of parsed.bench ?? []) { const pl = find(pk2.name); if (!pl || used.has(pl.name)) continue; if (pl.pos === "GK" && needGk > 0) { bench.push(pl); used.add(pl.name); needGk--; } else if (pl.pos !== "GK" && needOut > 0) { bench.push(pl); used.add(pl.name); needOut--; } }
+  if (needGk > 0) { const g = pool.find((p) => p.pos === "GK" && !used.has(p.name)); if (g) { bench.push(g); used.add(g.name); } }
+  for (const p of pool.filter((x) => x.pos !== "GK" && !used.has(x.name))) { if (needOut <= 0) break; bench.push(p); used.add(p.name); needOut--; }
+  const captain = parsed.captain && find(parsed.captain) && used.has(find(parsed.captain).name) ? find(parsed.captain).name : byPos.FWD[0]?.name ?? byPos.MID[0]?.name;
+  return { xi, captain, reasoning: parsed.reasoning || strat, formation: f, bench };
 }
 
 // ---- main ----
@@ -145,10 +157,11 @@ for (const gf of GAFFERS) {
   try {
     const w = ethers.Wallet.createRandom().connect(provider);
     await wait((await admin.sendTransaction({ to: w.address, value: ethers.parseEther("0.02") })).hash, "fund");
-    const { xi, captain, reasoning } = await pickXI(broker, chat.provider, endpoint, model, pool, gf.strat);
+    const { xi, captain, reasoning, formation, bench } = await pickXI(broker, chat.provider, endpoint, model, pool, gf.strat);
     let total = 0;
     const xiScored = xi.map((p) => { const s = stats.get(norm(p.name)) ?? {}; const pts = fpl(s.st ?? {}, p.pos, s.conceded ?? 0, p.name === captain); total += pts; return { ...p, points: pts, captain: p.name === captain }; });
-    const decision = { manager: w.address, managerName: gf.name, matchId: 0, match: `Matchday ${MATCHDAY}`, score: `${matches} games`, formation: "4-3-3", captain, reasoning, xi: xiScored, totalPoints: total, model, ts: new Date().toISOString() };
+    const benchScored = bench.map((p) => { const s = stats.get(norm(p.name)) ?? {}; return { ...p, points: fpl(s.st ?? {}, p.pos, s.conceded ?? 0, false) }; });
+    const decision = { manager: w.address, managerName: gf.name, matchId: 0, match: `Matchday ${MATCHDAY}`, score: `${matches} games`, formation, captain, reasoning, xi: xiScored, bench: benchScored, totalPoints: total, model, ts: new Date().toISOString() };
     const decisionRoot = await storeJSON(decision);
     const configRoot = await storeJSON({ name: gf.name, strategy: gf.strat });
     const gc = new ethers.Contract(dep.address, ABI, w);
@@ -156,7 +169,7 @@ for (const gf of GAFFERS) {
     await wait((await adminContract.recordPoints(contestId, w.address, MATCHDAY, total, `0g://${decisionRoot}`)).hash, "points");
     for (let o = 0; o < gf.overrides; o++) await wait((await adminContract.recordOverride(contestId, w.address)).hash, "override");
     const nations = new Set(xiScored.map((p) => p.team)).size;
-    console.log(`✓ ${gf.name}: ${total} pts · ${nations} nations · cap ${captain} · ${gf.overrides} overrides`);
+    console.log(`✓ ${gf.name}: ${formation} · ${total} pts · ${nations} nations · cap ${captain} · ${gf.overrides} overrides`);
   } catch (e) { console.log(`x ${gf.name}: ${e.message}`); }
 }
 

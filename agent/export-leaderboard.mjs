@@ -59,7 +59,9 @@ for (const addr of participants) {
     captain: decision?.captain ?? "—",
     reasoning: decision?.reasoning ?? "",
     model: decision?.model ?? "0G Compute",
+    formation: decision?.formation ?? "4-3-3",
     xi: decision?.xi ?? [],
+    bench: decision?.bench ?? [],
     points: Number(m[1]),
     overrideCount: Number(m[2]),
     multiplier: Number(m[3]) / 100,
@@ -80,7 +82,7 @@ const out = {
   score: featured.score,
   prizePoolOG,
   participants: participants.length,
-  rows: rows.map(({ xi, ...r }) => r), // leaderboard rows without full XI
+  rows: rows.map(({ xi, bench, ...r }) => r), // leaderboard rows without full squad
   king, // full king incl XI + reasoning
   updatedAt: new Date().toISOString(),
 };
@@ -92,10 +94,11 @@ if (king) {
     managerName: king.name,
     match: `Matchday ${featured.matchId}`,
     score: featured.score,
-    formation: "4-3-3",
+    formation: king.formation ?? "4-3-3",
     captain: king.captain,
     reasoning: king.reasoning,
     xi: king.xi,
+    bench: king.bench ?? [],
     totalPoints: king.points,
     model: king.model,
     contestId: id,

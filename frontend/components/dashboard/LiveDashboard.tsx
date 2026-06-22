@@ -17,6 +17,7 @@ type Snapshot = {
   captain: string;
   reasoning: string;
   xi: XIPlayer[];
+  bench?: XIPlayer[];
   totalPoints: number;
   model: string;
   contestId: number;
@@ -61,6 +62,14 @@ export function LiveDashboard() {
   }
 
   const slots = slotsFromXI(data.xi);
+  const benchSlots = (data.bench ?? []).map((p) => ({
+    name: p.name,
+    team: p.flag ?? p.team ?? "⚽",
+    pos: p.pos,
+    x: 0,
+    y: 0,
+    points: p.points ?? 0,
+  }));
 
   return (
     <>
@@ -93,7 +102,7 @@ export function LiveDashboard() {
       <div className="mx-auto max-w-7xl px-5 py-8">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,40fr)_minmax(0,60fr)]">
           {/* pitch */}
-          <Pitch xi={slots} formation={data.formation} />
+          <Pitch xi={slots} formation={data.formation} bench={benchSlots} />
 
           {/* intel */}
           <div className="flex flex-col gap-6">

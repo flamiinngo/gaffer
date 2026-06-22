@@ -36,33 +36,36 @@ export const BENCH: PlayerSlot[] = [
   { name: "Haaland", team: "🇳🇴", pos: "FWD", x: 0, y: 0, points: 0 },
 ];
 
-/** 4-3-3 coordinates (attacking upward), keyed by line. */
-const COORDS: Record<PlayerSlot["pos"], [number, number][]> = {
-  GK: [[50, 90]],
-  DEF: [[16, 72], [38, 75], [62, 75], [84, 72]],
-  MID: [[28, 50], [50, 46], [72, 50]],
-  FWD: [[24, 24], [50, 18], [76, 24]],
-};
-
 type XIPlayer = { name: string; pos: PlayerSlot["pos"]; team?: string; flag?: string; points?: number; captain?: boolean };
 
-/** Map a real, position-ordered XI (1 GK, 4 DEF, 3 MID, 3 FWD) onto pitch coordinates. */
+/** Y-band per line (attacking upward). */
+const Y: Record<PlayerSlot["pos"], number> = { GK: 90, DEF: 73, MID: 50, FWD: 22 };
+
+/** Map ANY valid formation's XI onto the pitch — players spread evenly per line, centered. */
 export function slotsFromXI(xi: XIPlayer[]): PlayerSlot[] {
-  const n: Record<string, number> = { GK: 0, DEF: 0, MID: 0, FWD: 0 };
-  return xi.map((p) => {
-    const i = n[p.pos]++;
-    const [x, y] = COORDS[p.pos]?.[i] ?? [50, 50];
-    return {
-      name: p.name,
-      team: p.flag ?? p.team ?? "⚽",
-      pos: p.pos,
-      x,
-      y,
-      points: p.points ?? 0,
-      captain: !!p.captain,
-      live: false,
-    };
+  const lines: Record<PlayerSlot["pos"], XIPlayer[]> = { GK: [], DEF: [], MID: [], FWD: [] };
+  for (const p of xi) (lines[p.pos] ?? lines.FWD).push(p);
+
+  const slots: PlayerSlot[] = [];
+  (Object.keys(lines) as PlayerSlot["pos"][]).forEach((pos) => {
+    const ps = lines[pos];
+    const n = ps.length;
+    const gap = n <= 1 ? 0 : n === 2 ? 36 : n === 3 ? 30 : n === 4 ? 24 : 19;
+    ps.forEach((p, i) => {
+      const x = n === 1 ? 50 : 50 + (i - (n - 1) / 2) * gap;
+      slots.push({
+        name: p.name,
+        team: p.flag ?? p.team ?? "⚽",
+        pos,
+        x: Math.max(8, Math.min(92, x)),
+        y: Y[pos],
+        points: p.points ?? 0,
+        captain: !!p.captain,
+        live: false,
+      });
+    });
   });
+  return slots;
 }
 
 function PlayerChip({ p }: { p: PlayerSlot }) {

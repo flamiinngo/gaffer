@@ -2,35 +2,17 @@
   "managerName": "Total Attack",
   "match": "Matchday 2",
   "score": "17 games",
-  "formation": "4-3-3",
-  "captain": "Lionel Messi",
-  "reasoning": "Lionel Messi is one of the most talented and prolific forwards in world football, capable of scoring goals and creating opportunities for his teammates.",
+  "formation": "4-4-2",
+  "captain": "Ayase Ueda",
+  "reasoning": "The 4-4-2 formation provides a balanced approach with strong defensive support and a solid midfield to complement the high-ceiling forwards.",
   "xi": [
     {
-      "name": "Eloy Room",
+      "name": "Alireza Beiranvand",
       "pos": "GK",
-      "team": "Curaçao",
-      "flag": "🇨🇼",
-      "rating": 10,
-      "points": 11,
-      "captain": false
-    },
-    {
-      "name": "Denzel Dumfries",
-      "pos": "DEF",
-      "team": "Netherlands",
-      "flag": "🇳🇱",
-      "rating": 8.8,
+      "team": "Iran",
+      "flag": "🇮🇷",
+      "rating": 9.8,
       "points": 8,
-      "captain": false
-    },
-    {
-      "name": "Juan Cáceres",
-      "pos": "DEF",
-      "team": "Paraguay",
-      "flag": "🇵🇾",
-      "rating": 8.2,
-      "points": 6,
       "captain": false
     },
     {
@@ -43,6 +25,15 @@
       "captain": false
     },
     {
+      "name": "Denzel Dumfries",
+      "pos": "DEF",
+      "team": "Netherlands",
+      "flag": "🇳🇱",
+      "rating": 8.8,
+      "points": 8,
+      "captain": false
+    },
+    {
       "name": "Alistair Johnston",
       "pos": "DEF",
       "team": "Canada",
@@ -52,21 +43,12 @@
       "captain": false
     },
     {
-      "name": "Mohamed Salah",
-      "pos": "MID",
-      "team": "Egypt",
-      "flag": "🇪🇬",
-      "rating": 8.6,
-      "points": 10,
-      "captain": false
-    },
-    {
-      "name": "Rubén Vargas",
-      "pos": "MID",
-      "team": "Switzerland",
-      "flag": "🇨🇭",
+      "name": "Shoja Khalilzadeh",
+      "pos": "DEF",
+      "team": "Iran",
+      "flag": "🇮🇷",
       "rating": 8.4,
-      "points": 9,
+      "points": 6,
       "captain": false
     },
     {
@@ -79,21 +61,39 @@
       "captain": false
     },
     {
+      "name": "Mohamed Salah",
+      "pos": "MID",
+      "team": "Egypt",
+      "flag": "🇪🇬",
+      "rating": 8.6,
+      "points": 10,
+      "captain": false
+    },
+    {
+      "name": "Nathan-Dylan Saliba",
+      "pos": "MID",
+      "team": "Canada",
+      "flag": "🇨🇦",
+      "rating": 8.5,
+      "points": 9,
+      "captain": false
+    },
+    {
+      "name": "Rubén Vargas",
+      "pos": "MID",
+      "team": "Switzerland",
+      "flag": "🇨🇭",
+      "rating": 8.4,
+      "points": 9,
+      "captain": false
+    },
+    {
       "name": "Ayase Ueda",
       "pos": "FWD",
       "team": "Japan",
       "flag": "🇯🇵",
       "rating": 9.6,
-      "points": 13,
-      "captain": false
-    },
-    {
-      "name": "Lionel Messi",
-      "pos": "FWD",
-      "team": "Argentina",
-      "flag": "🇦🇷",
-      "rating": 9.2,
-      "points": 20,
+      "points": 26,
       "captain": true
     },
     {
@@ -106,15 +106,49 @@
       "captain": false
     }
   ],
-  "totalPoints": 105,
+  "bench": [
+    {
+      "name": "Mostafa Shobeir",
+      "pos": "GK",
+      "team": "Egypt",
+      "flag": "🇪🇬",
+      "rating": 8.1,
+      "points": 3
+    },
+    {
+      "name": "Mostafa Ziko",
+      "pos": "MID",
+      "team": "Egypt",
+      "flag": "🇪🇬",
+      "rating": 8,
+      "points": 10
+    },
+    {
+      "name": "Mikel Oyarzabal",
+      "pos": "FWD",
+      "team": "Spain",
+      "flag": "🇪🇸",
+      "rating": 9.4,
+      "points": 12
+    },
+    {
+      "name": "Matheus Cunha",
+      "pos": "FWD",
+      "team": "Brazil",
+      "flag": "🇧🇷",
+      "rating": 9.2,
+      "points": 10
+    }
+  ],
+  "totalPoints": 104,
   "model": "qwen/qwen2.5-omni-7b",
-  "contestId": 6,
-  "decisionRoot": "0x69e3dccfadeafaf0027985a9ea60292800f3bfb90356e134b26f55485afdcc8a",
+  "contestId": 8,
+  "decisionRoot": "0xc2ceb2753bbf7d6d50cd24f282ba2d59989627af53fd3b85c6795e27e151c9d2",
   "onchain": {
-    "totalPoints": 105,
+    "totalPoints": 104,
     "overrideCount": 0,
     "multiplier": 3,
-    "effectiveScore": 315
+    "effectiveScore": 312
   },
-  "updatedAt": "2026-06-22T22:43:33.558Z"
+  "updatedAt": "2026-06-22T23:14:54.855Z"
 }

@@ -11,6 +11,7 @@ type Row = {
   address: string;
   captain: string;
   reasoning: string;
+  formation: string;
   points: number;
   overrideCount: number;
   multiplier: number;
@@ -94,7 +95,9 @@ export function Competition() {
                   <span className={`font-bold ${r.rank === 1 ? "text-gold" : r.rank === 2 ? "text-chalk" : "text-[#CD7F32]"}`}>{r.rank}</span>
                   <div className="min-w-0">
                     <div className="truncate font-semibold text-chalk">{r.name}</div>
-                    <div className="truncate text-[11px] text-data">cap {r.captain} · {r.overrideCount} override{r.overrideCount !== 1 ? "s" : ""}</div>
+                    <div className="truncate text-[11px] text-data">
+                      <span className="text-data/80">{r.formation}</span> · cap {r.captain} · {r.overrideCount} override{r.overrideCount !== 1 ? "s" : ""}
+                    </div>
                   </div>
                   <span className="text-right text-chalk tabular-nums">{r.points}</span>
                   <span className={`text-right tabular-nums ${r.overrideCount === 0 ? "text-grass" : "text-data"}`}>{r.multiplier.toFixed(2)}x</span>
