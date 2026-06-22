@@ -103,18 +103,27 @@ function Competitions() {
         One gaffer. Every competition.
       </p>
       <div className="flex flex-wrap items-center justify-center gap-3">
-        {COMPETITIONS.map((c) => (
-          <div key={c.id} className="card card-hover flex items-center gap-3 px-5 py-3">
-            <span className="text-2xl" aria-hidden>{c.emblem}</span>
-            <div className="text-left">
-              <div className="text-sm font-semibold text-chalk">{c.name}</div>
-              <div className="text-xs text-data">{c.season}</div>
+        {COMPETITIONS.map((c) => {
+          const live = c.id === "wc-2026";
+          return (
+            <div key={c.id} className={`card flex items-center gap-3 px-5 py-3 ${live ? "card-hover" : "opacity-70"}`}>
+              <span className="text-2xl" aria-hidden>{c.emblem}</span>
+              <div className="text-left">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-semibold text-chalk">{c.name}</span>
+                  {live ? (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-grass/12 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-grass">
+                      <span className="h-1 w-1 rounded-full bg-grass" /> Live
+                    </span>
+                  ) : (
+                    <span className="rounded-full bg-line/50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-data">Soon</span>
+                  )}
+                </div>
+                <div className="text-xs text-data">{c.season}</div>
+              </div>
             </div>
-          </div>
-        ))}
-        <div className="flex items-center gap-2 px-3 text-sm text-data">
-          <span className="text-grass">+</span> more leagues soon
-        </div>
+          );
+        })}
       </div>
     </section>
   );
