@@ -32,3 +32,8 @@ typechain-types/
 .idea/
 .vscode/
 coverage/
+
+# local-only working docs (not part of the product)
+BUILD_PLAN.md
+SUBMISSION.md
+DEMO_SCRIPT.md
