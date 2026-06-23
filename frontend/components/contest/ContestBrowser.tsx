@@ -38,8 +38,6 @@ const STATUS_STYLE: Record<Contest["status"], string> = {
 };
 
 function ContestCard({ c }: { c: Contest }) {
-  const opensIn = useCountdown(c.startTime);
-  const endsIn = useCountdown(c.endTime);
   return (
     <Link href={`/contest/${c.id}`} className="block">
       <div className="card card-hover flex h-full flex-col p-6">
@@ -57,11 +55,11 @@ function ContestCard({ c }: { c: Contest }) {
 
         <h3 className="mt-5 text-lg font-semibold leading-snug text-chalk">{c.name}</h3>
         <p className="mt-1 text-xs text-data">
-          {c.status === "UPCOMING" && opensIn
-            ? `Entries open · starts in ${opensIn}`
-            : c.status === "LIVE" && endsIn
-              ? `Live · ends in ${endsIn}`
-              : "Contest ended"}
+          {c.participantCount > 0
+            ? `Live · ${c.participantCount} gaffers competing`
+            : c.status === "ENDED"
+              ? "Contest ended"
+              : "Entries open — join now"}
         </p>
 
         <div className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-[var(--radius-data)] border border-line bg-line">
