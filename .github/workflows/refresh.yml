@@ -1,0 +1,60 @@
+name: Autonomous matchday refresh
+
+# Runs the agent on a schedule so the showcase auto-advances to the latest World Cup
+# matchday with no human in the loop. Also triggerable manually from the Actions tab.
+#
+# Requires these repo secrets (Settings → Secrets and variables → Actions):
+#   PRIVATE_KEY        agent/deployer wallet key (must hold testnet OG)
+#   SPORTAPI_KEY .. _5 SofaScore RapidAPI keys
+#   VERCEL_TOKEN       Vercel access token (deploys to the gaffer project)
+
+on:
+  schedule:
+    - cron: "0 6 * * *" # daily at 06:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install agent dependencies
+        working-directory: agent
+        run: npm install --legacy-peer-deps
+
+      - name: Run the agent on the current matchday
+        working-directory: agent
+        env:
+          OG_RPC_URL: https://evmrpc-testnet.0g.ai
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          SPORTAPI_HOST: sportapi7.p.rapidapi.com
+          SPORTAPI_KEY: ${{ secrets.SPORTAPI_KEY }}
+          SPORTAPI_KEY_2: ${{ secrets.SPORTAPI_KEY_2 }}
+          SPORTAPI_KEY_3: ${{ secrets.SPORTAPI_KEY_3 }}
+          SPORTAPI_KEY_4: ${{ secrets.SPORTAPI_KEY_4 }}
+          SPORTAPI_KEY_5: ${{ secrets.SPORTAPI_KEY_5 }}
+          WC_TOURNAMENT_ID: "16"
+          WC_SEASON_ID: "58210"
+        run: |
+          node populate-contest.mjs
+          node export-leaderboard.mjs
+
+      - name: Commit refreshed snapshots
+        run: |
+          git config user.name "gaffer-bot"
+          git config user.email "bot@gaffer.app"
+          git add frontend/public/leaderboard.json frontend/public/gaffer-latest.json frontend/public/featured.json
+          git commit -m "auto: refresh showcase to the current matchday" || echo "no changes"
+          git push || echo "nothing to push"
+
+      - name: Deploy to Vercel
+        working-directory: frontend
+        run: npx --yes vercel@latest --prod --yes --token=${{ secrets.VERCEL_TOKEN }} --scope maamis-projects

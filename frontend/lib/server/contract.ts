@@ -160,10 +160,8 @@ export async function readUserGaffers(address: `0x${string}`): Promise<UserGaffe
   return out.sort((a, b) => b.contestId - a.contestId);
 }
 
-/** Stale/duplicate contests hidden from the browse list (the contract can't delete; curated for clarity). */
-const HIDDEN_CONTEST_IDS = new Set(
-  (process.env.HIDDEN_CONTESTS ?? "1,2,3,5,6,7,8").split(",").map((s) => Number(s.trim())).filter((n) => n > 0)
-);
+/** The always-open contest anyone can join. */
+const OPEN_TRIALS_ID = Number(process.env.NEXT_PUBLIC_OPEN_CONTEST_ID ?? 4);
 
 export async function readAllContests(): Promise<ContestSummary[]> {
   const next = await publicClient.readContract({
@@ -184,21 +182,26 @@ export async function readAllContests(): Promise<ContestSummary[]> {
     )
   );
 
-  return results
-    .map((c) => {
-      const [id, name, prizePool, entryFee, startTime, endTime, resolved, participantCount] = c;
-      return {
-        id: Number(id),
-        name,
-        prizePoolOG: formatEther(prizePool),
-        entryFeeOG: formatEther(entryFee),
-        startTime: Number(startTime),
-        endTime: Number(endTime),
-        resolved,
-        participantCount: Number(participantCount),
-        status: statusOf(Number(startTime), Number(endTime), resolved),
-      } satisfies ContestSummary;
-    })
-    .filter((c) => !HIDDEN_CONTEST_IDS.has(c.id))
-    .sort((a, b) => b.id - a.id);
+  const all = results.map((c) => {
+    const [id, name, prizePool, entryFee, startTime, endTime, resolved, participantCount] = c;
+    return {
+      id: Number(id),
+      name,
+      prizePoolOG: formatEther(prizePool),
+      entryFeeOG: formatEther(entryFee),
+      startTime: Number(startTime),
+      endTime: Number(endTime),
+      resolved,
+      participantCount: Number(participantCount),
+      status: statusOf(Number(startTime), Number(endTime), resolved),
+    } satisfies ContestSummary;
+  });
+
+  // Show only the open-trials contest and the LATEST populated showcase (highest id with a full
+  // gaffer field), so repeated agent runs never pile stale contests into the list.
+  const latestShowcase = all
+    .filter((c) => c.participantCount >= 3)
+    .sort((a, b) => b.id - a.id)[0]?.id;
+  const visible = new Set<number>([OPEN_TRIALS_ID, latestShowcase].filter((x): x is number => typeof x === "number"));
+  return all.filter((c) => visible.has(c.id)).sort((a, b) => b.id - a.id);
 }
