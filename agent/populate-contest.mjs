@@ -72,9 +72,16 @@ function fpl(s, pos, conceded, cap) {
 // ---- build the matchday pool + scoring stats from every game's lineups ----
 async function buildMatchday() {
   const { events } = await sofa(`/api/v1/unique-tournament/${TOUR}/season/${SEASON}/events/last/0`);
-  const matches = events.filter((e) => e.status?.type === "finished" && String(e.roundInfo?.name ?? e.roundInfo?.round ?? "") === MATCHDAY);
-  if (!matches.length) throw new Error(`no finished matches for matchday ${MATCHDAY}`);
-  console.log(`Matchday ${MATCHDAY}: ${matches.length} games`);
+  const finished = events.filter((e) => e.status?.type === "finished");
+  if (!finished.length) throw new Error("no finished WC matches available");
+  // Auto-target the LATEST matchday (the round of the most recently played games), unless MATCHDAY overrides.
+  finished.sort((a, b) => (b.startTimestamp ?? 0) - (a.startTimestamp ?? 0));
+  const roundKey = (e) => String(e.roundInfo?.name ?? e.roundInfo?.round ?? "");
+  const target = process.env.MATCHDAY || roundKey(finished[0]);
+  const roundNum = Number(finished[0].roundInfo?.round ?? process.env.MATCHDAY ?? 0) || 0;
+  const matches = finished.filter((e) => roundKey(e) === target);
+  if (!matches.length) throw new Error(`no finished matches for round ${target}`);
+  console.log(`Matchday ${target}: ${matches.length} games`);
 
   const pool = []; // {name,pos,team,flag,rating}
   const stats = new Map(); // norm(name) -> {st,pos,team,conceded}
@@ -101,7 +108,7 @@ async function buildMatchday() {
   const trimmed = pool.slice(0, 180);
   const teams = new Set(trimmed.map((p) => p.team));
   console.log(`Pool: ${trimmed.length} players across ${teams.size} nations`);
-  return { matches: matches.length, pool: trimmed, stats };
+  return { matches: matches.length, pool: trimmed, stats, label: target, matchId: roundNum };
 }
 
 // Valid FPL formations (outfield DEF-MID-FWD; GK is always 1).
@@ -139,7 +146,7 @@ async function pickXI(broker, prov, endpoint, model, pool, strat) {
 
 // ---- main ----
 console.log("Funder:", admin.address, ethers.formatEther(await provider.getBalance(admin.address)), "OG");
-const { matches, pool, stats } = await buildMatchday();
+const { matches, pool, stats, label, matchId } = await buildMatchday();
 
 const broker = await createZGComputeNetworkBroker(admin);
 try { await broker.ledger.getLedger(); } catch { await broker.ledger.addLedger(3); }
@@ -149,7 +156,7 @@ const { endpoint, model } = await broker.inference.getServiceMetadata(chat.provi
 
 const contestId = Number(await adminContract.nextContestId());
 const now = Math.floor(Date.now() / 1000);
-const ct = await adminContract.createContest(`FIFA World Cup 2026 — Matchday ${MATCHDAY}`, 0n, now + 7 * 86400, now + 30 * 86400);
+const ct = await adminContract.createContest(`FIFA World Cup 2026 — Matchday ${label}`, 0n, now + 7 * 86400, now + 30 * 86400);
 await wait(ct.hash, "createContest");
 console.log(`Contest #${contestId} created`);
 
@@ -161,17 +168,17 @@ for (const gf of GAFFERS) {
     let total = 0;
     const xiScored = xi.map((p) => { const s = stats.get(norm(p.name)) ?? {}; const pts = fpl(s.st ?? {}, p.pos, s.conceded ?? 0, p.name === captain); total += pts; return { ...p, points: pts, captain: p.name === captain }; });
     const benchScored = bench.map((p) => { const s = stats.get(norm(p.name)) ?? {}; return { ...p, points: fpl(s.st ?? {}, p.pos, s.conceded ?? 0, false) }; });
-    const decision = { manager: w.address, managerName: gf.name, matchId: 0, match: `Matchday ${MATCHDAY}`, score: `${matches} games`, formation, captain, reasoning, xi: xiScored, bench: benchScored, totalPoints: total, model, ts: new Date().toISOString() };
+    const decision = { manager: w.address, managerName: gf.name, matchId, match: `Matchday ${label}`, score: `${matches} games`, formation, captain, reasoning, xi: xiScored, bench: benchScored, totalPoints: total, model, ts: new Date().toISOString() };
     const decisionRoot = await storeJSON(decision);
     const configRoot = await storeJSON({ name: gf.name, strategy: gf.strat });
     const gc = new ethers.Contract(dep.address, ABI, w);
     await wait((await gc.enterContest(contestId, `0g://${configRoot}`, { value: 0 })).hash, "enter");
-    await wait((await adminContract.recordPoints(contestId, w.address, MATCHDAY, total, `0g://${decisionRoot}`)).hash, "points");
+    await wait((await adminContract.recordPoints(contestId, w.address, matchId, total, `0g://${decisionRoot}`)).hash, "points");
     for (let o = 0; o < gf.overrides; o++) await wait((await adminContract.recordOverride(contestId, w.address)).hash, "override");
     const nations = new Set(xiScored.map((p) => p.team)).size;
     console.log(`✓ ${gf.name}: ${formation} · ${total} pts · ${nations} nations · cap ${captain} · ${gf.overrides} overrides`);
   } catch (e) { console.log(`x ${gf.name}: ${e.message}`); }
 }
 
-writeFileSync(join(here, "..", "frontend", "public", "featured.json"), JSON.stringify({ contestId, matchId: MATCHDAY, match: `FIFA World Cup 2026 — Matchday ${MATCHDAY}`, score: `${matches} games` }, null, 2));
-console.log(`\n✓ Showcase contest #${contestId} populated (matchday ${MATCHDAY}).`);
+writeFileSync(join(here, "..", "frontend", "public", "featured.json"), JSON.stringify({ contestId, matchId: label, match: `FIFA World Cup 2026 — Matchday ${label}`, score: `${matches} games` }, null, 2));
+console.log(`\n✓ Showcase contest #${contestId} populated (matchday ${label}).`);

@@ -1,154 +1,154 @@
 {
-  "managerName": "Total Attack",
-  "match": "Matchday 2",
-  "score": "17 games",
+  "managerName": "The Catenaccio Kid",
+  "match": "Matchday 3",
+  "score": "12 games",
   "formation": "4-4-2",
-  "captain": "Ayase Ueda",
-  "reasoning": "The 4-4-2 formation provides a balanced approach with strong defensive support and a solid midfield to complement the high-ceiling forwards.",
+  "captain": "Alisson",
+  "reasoning": "Alisson is one of the best goalkeepers in the world, known for his exceptional reflexes and distribution skills. His presence in the penalty area can be crucial for set pieces and aerial duels.",
   "xi": [
     {
-      "name": "Alireza Beiranvand",
+      "name": "Alisson",
       "pos": "GK",
-      "team": "Iran",
-      "flag": "🇮🇷",
-      "rating": 9.8,
-      "points": 8,
-      "captain": false
+      "team": "Brazil",
+      "flag": "🇧🇷",
+      "rating": 8.5,
+      "points": 14,
+      "captain": true
     },
     {
-      "name": "Richie Laryea",
-      "pos": "DEF",
-      "team": "Canada",
-      "flag": "🇨🇦",
-      "rating": 8.8,
-      "points": 6,
-      "captain": false
-    },
-    {
-      "name": "Denzel Dumfries",
+      "name": "Jan Paul van Hecke",
       "pos": "DEF",
       "team": "Netherlands",
       "flag": "🇳🇱",
-      "rating": 8.8,
+      "rating": 9.1,
       "points": 8,
       "captain": false
     },
     {
-      "name": "Alistair Johnston",
+      "name": "Mateo Chávez",
       "pos": "DEF",
-      "team": "Canada",
-      "flag": "🇨🇦",
-      "rating": 8.6,
+      "team": "Mexico",
+      "flag": "🇲🇽",
+      "rating": 8.1,
+      "points": 12,
+      "captain": false
+    },
+    {
+      "name": "Gabriel Magalhães",
+      "pos": "DEF",
+      "team": "Brazil",
+      "flag": "🇧🇷",
+      "rating": 8.1,
       "points": 6,
       "captain": false
     },
     {
-      "name": "Shoja Khalilzadeh",
+      "name": "Virgil van Dijk",
       "pos": "DEF",
-      "team": "Iran",
-      "flag": "🇮🇷",
-      "rating": 8.4,
-      "points": 6,
+      "team": "Netherlands",
+      "flag": "🇳🇱",
+      "rating": 8,
+      "points": 5,
       "captain": false
     },
     {
-      "name": "Stephen Eustaquio",
+      "name": "Bilal El Khannouss",
       "pos": "MID",
-      "team": "Canada",
-      "flag": "🇨🇦",
-      "rating": 8.6,
-      "points": 3,
+      "team": "Morocco",
+      "flag": "🇲🇦",
+      "rating": 8.7,
+      "points": 2,
       "captain": false
     },
     {
-      "name": "Mohamed Salah",
+      "name": "Sebastian Berhalter",
       "pos": "MID",
-      "team": "Egypt",
-      "flag": "🇪🇬",
-      "rating": 8.6,
+      "team": "USA",
+      "flag": "🇺🇸",
+      "rating": 8.2,
       "points": 10,
       "captain": false
     },
     {
-      "name": "Nathan-Dylan Saliba",
+      "name": "Lewis Ferguson",
       "pos": "MID",
-      "team": "Canada",
-      "flag": "🇨🇦",
-      "rating": 8.5,
-      "points": 9,
+      "team": "Scotland",
+      "flag": "🇸🇽",
+      "rating": 8.1,
+      "points": 2,
       "captain": false
     },
     {
-      "name": "Rubén Vargas",
+      "name": "Johan Manzambi",
       "pos": "MID",
       "team": "Switzerland",
       "flag": "🇨🇭",
-      "rating": 8.4,
-      "points": 9,
+      "rating": 8.1,
+      "points": 10,
       "captain": false
     },
     {
-      "name": "Ayase Ueda",
+      "name": "Vinícius Júnior",
       "pos": "FWD",
-      "team": "Japan",
-      "flag": "🇯🇵",
-      "rating": 9.6,
-      "points": 26,
-      "captain": true
+      "team": "Brazil",
+      "flag": "🇧🇷",
+      "rating": 9.3,
+      "points": 10,
+      "captain": false
     },
     {
-      "name": "Cody Gakpo",
+      "name": "Arda Güler",
       "pos": "FWD",
-      "team": "Netherlands",
-      "flag": "🇳🇱",
-      "rating": 9.5,
-      "points": 13,
+      "team": "Türkiye",
+      "flag": "🇹🇷",
+      "rating": 8.6,
+      "points": 6,
       "captain": false
     }
   ],
   "bench": [
     {
-      "name": "Mostafa Shobeir",
+      "name": "Gregor Kobel",
       "pos": "GK",
-      "team": "Egypt",
-      "flag": "🇪🇬",
-      "rating": 8.1,
-      "points": 3
+      "team": "Switzerland",
+      "flag": "🇨🇭",
+      "rating": 8.9,
+      "points": 4
     },
     {
-      "name": "Mostafa Ziko",
+      "name": "Soufiane Rahimi",
+      "pos": "FWD",
+      "team": "Morocco",
+      "flag": "🇲🇦",
+      "rating": 8.2,
+      "points": 8
+    },
+    {
+      "name": "Nicolas Pépé",
       "pos": "MID",
-      "team": "Egypt",
-      "flag": "🇪🇬",
+      "team": "Côte d'Ivoire",
+      "flag": "🇨🇮",
       "rating": 8,
-      "points": 10
+      "points": 13
     },
     {
-      "name": "Mikel Oyarzabal",
-      "pos": "FWD",
-      "team": "Spain",
-      "flag": "🇪🇸",
-      "rating": 9.4,
-      "points": 12
-    },
-    {
-      "name": "Matheus Cunha",
-      "pos": "FWD",
+      "name": "Bruno Guimarães",
+      "pos": "MID",
       "team": "Brazil",
       "flag": "🇧🇷",
-      "rating": 9.2,
-      "points": 10
+      "rating": 8,
+      "points": 9
     }
   ],
-  "totalPoints": 104,
+  "totalPoints": 85,
   "model": "qwen/qwen2.5-omni-7b",
-  "contestId": 8,
-  "decisionRoot": "0xc2ceb2753bbf7d6d50cd24f282ba2d59989627af53fd3b85c6795e27e151c9d2",
+  "contestId": 9,
+  "decisionRoot": "0xd9c3eb854ba62dee3964ea9d6679ee6cf838b7986ba701183a48f75f536d1681",
   "onchain": {
-    "totalPoints": 104,
-    "overrideCount": 0,
-    "multiplier": 3,
-    "effectiveScore": 312
+    "totalPoints": 85,
+    "overrideCount": 1,
+    "multiplier": 2.75,
+    "effectiveScore": 233
   },
-  "updatedAt": "2026-06-22T23:14:54.855Z"
+  "updatedAt": "2026-06-26T20:07:24.923Z"
 }

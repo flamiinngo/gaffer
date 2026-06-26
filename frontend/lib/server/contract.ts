@@ -162,7 +162,7 @@ export async function readUserGaffers(address: `0x${string}`): Promise<UserGaffe
 
 /** Stale/duplicate contests hidden from the browse list (the contract can't delete; curated for clarity). */
 const HIDDEN_CONTEST_IDS = new Set(
-  (process.env.HIDDEN_CONTESTS ?? "1,2,3,5,6,7").split(",").map((s) => Number(s.trim())).filter((n) => n > 0)
+  (process.env.HIDDEN_CONTESTS ?? "1,2,3,5,6,7,8").split(",").map((s) => Number(s.trim())).filter((n) => n > 0)
 );
 
 export async function readAllContests(): Promise<ContestSummary[]> {
