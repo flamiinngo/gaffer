@@ -1,19 +1,19 @@
 {
-  "managerName": "The Catenaccio Kid",
+  "managerName": "Total Attack",
   "match": "Matchday 3",
-  "score": "12 games",
+  "score": "18 games",
   "formation": "4-4-2",
-  "captain": "Alisson",
-  "reasoning": "Alisson is one of the best goalkeepers in the world, known for his exceptional reflexes and distribution skills. His presence in the penalty area can be crucial for set pieces and aerial duels.",
+  "captain": "Kylian Mbappé",
+  "reasoning": "Kylian Mbappé is one of the world's top forwards with exceptional speed and goal-scoring ability, making him ideal for an ultra-attacking strategy.",
   "xi": [
     {
-      "name": "Alisson",
+      "name": "Gregor Kobel",
       "pos": "GK",
-      "team": "Brazil",
-      "flag": "🇧🇷",
-      "rating": 8.5,
-      "points": 14,
-      "captain": true
+      "team": "Switzerland",
+      "flag": "🇨🇭",
+      "rating": 8.9,
+      "points": 4,
+      "captain": false
     },
     {
       "name": "Jan Paul van Hecke",
@@ -52,40 +52,49 @@
       "captain": false
     },
     {
-      "name": "Bilal El Khannouss",
+      "name": "Ousmane Dembélé",
       "pos": "MID",
-      "team": "Morocco",
-      "flag": "🇲🇦",
-      "rating": 8.7,
-      "points": 2,
+      "team": "France",
+      "flag": "🇫🇷",
+      "rating": 10,
+      "points": 17,
       "captain": false
     },
     {
-      "name": "Sebastian Berhalter",
+      "name": "Kevin De Bruyne",
       "pos": "MID",
-      "team": "USA",
-      "flag": "🇺🇸",
-      "rating": 8.2,
-      "points": 10,
+      "team": "Belgium",
+      "flag": "🇧🇪",
+      "rating": 9,
+      "points": 7,
       "captain": false
     },
     {
-      "name": "Lewis Ferguson",
+      "name": "Pape Gueye",
       "pos": "MID",
-      "team": "Scotland",
-      "flag": "🇸🇽",
-      "rating": 8.1,
-      "points": 2,
+      "team": "Senegal",
+      "flag": "🇸🇳",
+      "rating": 9.9,
+      "points": 14,
       "captain": false
     },
     {
-      "name": "Johan Manzambi",
+      "name": "Leandro Trossard",
       "pos": "MID",
-      "team": "Switzerland",
-      "flag": "🇨🇭",
-      "rating": 8.1,
-      "points": 10,
+      "team": "Belgium",
+      "flag": "🇧🇪",
+      "rating": 8.8,
+      "points": 12,
       "captain": false
+    },
+    {
+      "name": "Kylian Mbappé",
+      "pos": "FWD",
+      "team": "France",
+      "flag": "🇫🇷",
+      "rating": 7.4,
+      "points": 16,
+      "captain": true
     },
     {
       "name": "Vinícius Júnior",
@@ -95,60 +104,51 @@
       "rating": 9.3,
       "points": 10,
       "captain": false
-    },
-    {
-      "name": "Arda Güler",
-      "pos": "FWD",
-      "team": "Türkiye",
-      "flag": "🇹🇷",
-      "rating": 8.6,
-      "points": 6,
-      "captain": false
     }
   ],
   "bench": [
     {
-      "name": "Gregor Kobel",
+      "name": "Alisson",
       "pos": "GK",
-      "team": "Switzerland",
-      "flag": "🇨🇭",
-      "rating": 8.9,
-      "points": 4
+      "team": "Brazil",
+      "flag": "🇧🇷",
+      "rating": 8.5,
+      "points": 7
     },
     {
-      "name": "Soufiane Rahimi",
+      "name": "Iliman Ndiaye",
       "pos": "FWD",
-      "team": "Morocco",
-      "flag": "🇲🇦",
-      "rating": 8.2,
+      "team": "Senegal",
+      "flag": "🇸🇳",
+      "rating": 8.7,
       "points": 8
     },
     {
-      "name": "Nicolas Pépé",
+      "name": "Bilal El Khannouss",
       "pos": "MID",
-      "team": "Côte d'Ivoire",
-      "flag": "🇨🇮",
-      "rating": 8,
-      "points": 13
+      "team": "Morocco",
+      "flag": "🇲🇦",
+      "rating": 8.7,
+      "points": 2
     },
     {
-      "name": "Bruno Guimarães",
-      "pos": "MID",
-      "team": "Brazil",
-      "flag": "🇧🇷",
-      "rating": 8,
-      "points": 9
+      "name": "Aubrey Modiba",
+      "pos": "DEF",
+      "team": "South Africa",
+      "flag": "🇿🇦",
+      "rating": 7.5,
+      "points": 6
     }
   ],
-  "totalPoints": 85,
+  "totalPoints": 111,
   "model": "qwen/qwen2.5-omni-7b",
-  "contestId": 9,
-  "decisionRoot": "0xd9c3eb854ba62dee3964ea9d6679ee6cf838b7986ba701183a48f75f536d1681",
+  "contestId": 10,
+  "decisionRoot": "0x46da30d31f05ce039f7d217c95e3b1613164f69730e3ca768033f6b9ecb278d5",
   "onchain": {
-    "totalPoints": 85,
-    "overrideCount": 1,
-    "multiplier": 2.75,
-    "effectiveScore": 233
+    "totalPoints": 111,
+    "overrideCount": 0,
+    "multiplier": 3,
+    "effectiveScore": 333
   },
-  "updatedAt": "2026-06-26T20:07:24.923Z"
+  "updatedAt": "2026-06-27T18:22:22.313Z"
 }
