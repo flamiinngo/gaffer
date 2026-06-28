@@ -1,68 +1,68 @@
 {
-  "contestId": 10,
+  "contestId": 11,
   "match": "FIFA World Cup 2026 — Matchday 3",
-  "score": "18 games",
+  "score": "24 games",
   "prizePoolOG": "0.0",
   "participants": 3,
   "rows": [
     {
-      "address": "0xf25260aD96A42C41c3C110b1AC73eE4235895Fe9",
+      "address": "0x477f3BB9FC95b776F7a092a65f8738452810a770",
       "name": "Total Attack",
-      "captain": "Kylian Mbappé",
-      "reasoning": "Kylian Mbappé is one of the world's top forwards with exceptional speed and goal-scoring ability, making him ideal for an ultra-attacking strategy.",
+      "captain": "Lionel Messi",
+      "reasoning": "The 4-4-2 formation provides a balanced approach with two central defenders, four midfielders, and two strikers. This setup allows for strong defensive support while maintaining a high number of attacking players.",
       "model": "qwen/qwen2.5-omni-7b",
       "formation": "4-4-2",
-      "points": 111,
+      "points": 94,
       "overrideCount": 0,
       "multiplier": 3,
-      "effectiveScore": 333,
-      "decisionRoot": "0x46da30d31f05ce039f7d217c95e3b1613164f69730e3ca768033f6b9ecb278d5",
+      "effectiveScore": 282,
+      "decisionRoot": "0xff4a1eb18cb5dcd23f4ded04b3c5fa1bb0ac28101dad9107ae0699542e92217b",
       "rank": 1
     },
     {
-      "address": "0x55556912D4006e1fB71db25e24400FEd7750ef83",
-      "name": "The Catenaccio Kid",
-      "captain": "Alisson",
-      "reasoning": "Alisson is one of the best goalkeepers in the world known for his exceptional reflexes and distribution skills, making him ideal as captain to lead the defense.",
+      "address": "0xBEBACb9e05aD8CfA97234880d8b8834c7cB2769f",
+      "name": "Moneyball",
+      "captain": "Vinícius Júnior",
+      "reasoning": "Ricardo Guedes is one of the highest-rated forwards in this matchday pool with excellent scoring ability.",
       "model": "qwen/qwen2.5-omni-7b",
       "formation": "4-4-2",
-      "points": 113,
-      "overrideCount": 1,
-      "multiplier": 2.75,
-      "effectiveScore": 310,
-      "decisionRoot": "0x7f548d0f5112bc010fad32a38c5b4dc2ae68bebd133c84685e890b51789913b4",
+      "points": 111,
+      "overrideCount": 2,
+      "multiplier": 2.5,
+      "effectiveScore": 277,
+      "decisionRoot": "0x64819755af5ed9e0335f528d5e4b337c7082652641c313b0d73001e058249ab3",
       "rank": 2
     },
     {
-      "address": "0x4caEC062118341243834020447b3779992c0BA31",
-      "name": "Moneyball",
-      "captain": "Ousmane Dembélé",
-      "reasoning": "Ousmane Dembélé is one of the highest-rated midfielders in this matchday pool with exceptional skills and versatility.",
+      "address": "0xDfAeD79630D2284f2Bc99Ae9A0F4373aF4986aa1",
+      "name": "The Catenaccio Kid",
+      "captain": "Alisson",
+      "reasoning": "Alisson is one of the best goalkeepers in the world, known for his exceptional reflexes and distribution skills. His ability to command the penalty area and make crucial saves makes him an ideal choice as captain.",
       "model": "qwen/qwen2.5-omni-7b",
-      "formation": "4-4-2",
-      "points": 120,
-      "overrideCount": 2,
-      "multiplier": 2.5,
-      "effectiveScore": 300,
-      "decisionRoot": "0x788127348e39c92b2330b9a2f771e64da381b46968c76df75ebb94bea6dcd23f",
+      "formation": "5-3-2",
+      "points": 90,
+      "overrideCount": 1,
+      "multiplier": 2.75,
+      "effectiveScore": 247,
+      "decisionRoot": "0x9e89046ea750500092b61fb42bdd91889c0d20c62af564df36edec693afccac8",
       "rank": 3
     }
   ],
   "king": {
-    "address": "0xf25260aD96A42C41c3C110b1AC73eE4235895Fe9",
+    "address": "0x477f3BB9FC95b776F7a092a65f8738452810a770",
     "name": "Total Attack",
-    "captain": "Kylian Mbappé",
-    "reasoning": "Kylian Mbappé is one of the world's top forwards with exceptional speed and goal-scoring ability, making him ideal for an ultra-attacking strategy.",
+    "captain": "Lionel Messi",
+    "reasoning": "The 4-4-2 formation provides a balanced approach with two central defenders, four midfielders, and two strikers. This setup allows for strong defensive support while maintaining a high number of attacking players.",
     "model": "qwen/qwen2.5-omni-7b",
     "formation": "4-4-2",
     "xi": [
       {
-        "name": "Gregor Kobel",
+        "name": "Alisson",
         "pos": "GK",
-        "team": "Switzerland",
-        "flag": "🇨🇭",
-        "rating": 8.9,
-        "points": 4,
+        "team": "Brazil",
+        "flag": "🇧🇷",
+        "rating": 8.5,
+        "points": 7,
         "captain": false
       },
       {
@@ -102,12 +102,12 @@
         "captain": false
       },
       {
-        "name": "Ousmane Dembélé",
+        "name": "Casemiro",
         "pos": "MID",
-        "team": "France",
-        "flag": "🇫🇷",
-        "rating": 10,
-        "points": 17,
+        "team": "Brazil",
+        "flag": "🇧🇷",
+        "rating": 7.6,
+        "points": 3,
         "captain": false
       },
       {
@@ -120,22 +120,31 @@
         "captain": false
       },
       {
-        "name": "Pape Gueye",
+        "name": "Jude Bellingham",
         "pos": "MID",
-        "team": "Senegal",
-        "flag": "🇸🇳",
-        "rating": 9.9,
-        "points": 14,
+        "team": "England",
+        "flag": "🇪🇳",
+        "rating": 9.3,
+        "points": 11,
         "captain": false
       },
       {
-        "name": "Leandro Trossard",
+        "name": "Ousmane Dembélé",
         "pos": "MID",
-        "team": "Belgium",
-        "flag": "🇧🇪",
-        "rating": 8.8,
-        "points": 12,
+        "team": "France",
+        "flag": "🇫🇷",
+        "rating": 10,
+        "points": 17,
         "captain": false
+      },
+      {
+        "name": "Lionel Messi",
+        "pos": "FWD",
+        "team": "Argentina",
+        "flag": "🇦🇷",
+        "rating": 8,
+        "points": 10,
+        "captain": true
       },
       {
         "name": "Kylian Mbappé",
@@ -143,8 +152,26 @@
         "team": "France",
         "flag": "🇫🇷",
         "rating": 7.4,
-        "points": 16,
-        "captain": true
+        "points": 8,
+        "captain": false
+      }
+    ],
+    "bench": [
+      {
+        "name": "Angus Gunn",
+        "pos": "GK",
+        "team": "Scotland",
+        "flag": "🇸🇽",
+        "rating": 8.3,
+        "points": 2
+      },
+      {
+        "name": "Pape Gueye",
+        "pos": "MID",
+        "team": "Senegal",
+        "flag": "🇸🇳",
+        "rating": 9.9,
+        "points": 14
       },
       {
         "name": "Vinícius Júnior",
@@ -152,52 +179,25 @@
         "team": "Brazil",
         "flag": "🇧🇷",
         "rating": 9.3,
-        "points": 10,
-        "captain": false
-      }
-    ],
-    "bench": [
-      {
-        "name": "Alisson",
-        "pos": "GK",
-        "team": "Brazil",
-        "flag": "🇧🇷",
-        "rating": 8.5,
-        "points": 7
+        "points": 10
       },
       {
-        "name": "Iliman Ndiaye",
-        "pos": "FWD",
-        "team": "Senegal",
-        "flag": "🇸🇳",
-        "rating": 8.7,
-        "points": 8
-      },
-      {
-        "name": "Bilal El Khannouss",
+        "name": "Riyad Mahrez",
         "pos": "MID",
-        "team": "Morocco",
-        "flag": "🇲🇦",
-        "rating": 8.7,
-        "points": 2
-      },
-      {
-        "name": "Aubrey Modiba",
-        "pos": "DEF",
-        "team": "South Africa",
-        "flag": "🇿🇦",
-        "rating": 7.5,
-        "points": 6
+        "team": "Algeria",
+        "flag": "🇩🇿",
+        "rating": 9,
+        "points": 12
       }
     ],
-    "points": 111,
+    "points": 94,
     "overrideCount": 0,
     "multiplier": 3,
-    "effectiveScore": 333,
-    "decisionRoot": "0x46da30d31f05ce039f7d217c95e3b1613164f69730e3ca768033f6b9ecb278d5",
+    "effectiveScore": 282,
+    "decisionRoot": "0xff4a1eb18cb5dcd23f4ded04b3c5fa1bb0ac28101dad9107ae0699542e92217b",
     "rank": 1,
     "match": "FIFA World Cup 2026 — Matchday 3",
-    "score": "18 games"
+    "score": "24 games"
   },
-  "updatedAt": "2026-06-27T18:22:22.313Z"
+  "updatedAt": "2026-06-28T08:47:02.318Z"
 }

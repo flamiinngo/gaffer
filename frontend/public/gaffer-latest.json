@@ -1,18 +1,18 @@
 {
   "managerName": "Total Attack",
   "match": "Matchday 3",
-  "score": "18 games",
+  "score": "24 games",
   "formation": "4-4-2",
-  "captain": "Kylian Mbappé",
-  "reasoning": "Kylian Mbappé is one of the world's top forwards with exceptional speed and goal-scoring ability, making him ideal for an ultra-attacking strategy.",
+  "captain": "Lionel Messi",
+  "reasoning": "The 4-4-2 formation provides a balanced approach with two central defenders, four midfielders, and two strikers. This setup allows for strong defensive support while maintaining a high number of attacking players.",
   "xi": [
     {
-      "name": "Gregor Kobel",
+      "name": "Alisson",
       "pos": "GK",
-      "team": "Switzerland",
-      "flag": "🇨🇭",
-      "rating": 8.9,
-      "points": 4,
+      "team": "Brazil",
+      "flag": "🇧🇷",
+      "rating": 8.5,
+      "points": 7,
       "captain": false
     },
     {
@@ -52,12 +52,12 @@
       "captain": false
     },
     {
-      "name": "Ousmane Dembélé",
+      "name": "Casemiro",
       "pos": "MID",
-      "team": "France",
-      "flag": "🇫🇷",
-      "rating": 10,
-      "points": 17,
+      "team": "Brazil",
+      "flag": "🇧🇷",
+      "rating": 7.6,
+      "points": 3,
       "captain": false
     },
     {
@@ -70,22 +70,31 @@
       "captain": false
     },
     {
-      "name": "Pape Gueye",
+      "name": "Jude Bellingham",
       "pos": "MID",
-      "team": "Senegal",
-      "flag": "🇸🇳",
-      "rating": 9.9,
-      "points": 14,
+      "team": "England",
+      "flag": "🇪🇳",
+      "rating": 9.3,
+      "points": 11,
       "captain": false
     },
     {
-      "name": "Leandro Trossard",
+      "name": "Ousmane Dembélé",
       "pos": "MID",
-      "team": "Belgium",
-      "flag": "🇧🇪",
-      "rating": 8.8,
-      "points": 12,
+      "team": "France",
+      "flag": "🇫🇷",
+      "rating": 10,
+      "points": 17,
       "captain": false
+    },
+    {
+      "name": "Lionel Messi",
+      "pos": "FWD",
+      "team": "Argentina",
+      "flag": "🇦🇷",
+      "rating": 8,
+      "points": 10,
+      "captain": true
     },
     {
       "name": "Kylian Mbappé",
@@ -93,8 +102,26 @@
       "team": "France",
       "flag": "🇫🇷",
       "rating": 7.4,
-      "points": 16,
-      "captain": true
+      "points": 8,
+      "captain": false
+    }
+  ],
+  "bench": [
+    {
+      "name": "Angus Gunn",
+      "pos": "GK",
+      "team": "Scotland",
+      "flag": "🇸🇽",
+      "rating": 8.3,
+      "points": 2
+    },
+    {
+      "name": "Pape Gueye",
+      "pos": "MID",
+      "team": "Senegal",
+      "flag": "🇸🇳",
+      "rating": 9.9,
+      "points": 14
     },
     {
       "name": "Vinícius Júnior",
@@ -102,53 +129,26 @@
       "team": "Brazil",
       "flag": "🇧🇷",
       "rating": 9.3,
-      "points": 10,
-      "captain": false
-    }
-  ],
-  "bench": [
-    {
-      "name": "Alisson",
-      "pos": "GK",
-      "team": "Brazil",
-      "flag": "🇧🇷",
-      "rating": 8.5,
-      "points": 7
+      "points": 10
     },
     {
-      "name": "Iliman Ndiaye",
-      "pos": "FWD",
-      "team": "Senegal",
-      "flag": "🇸🇳",
-      "rating": 8.7,
-      "points": 8
-    },
-    {
-      "name": "Bilal El Khannouss",
+      "name": "Riyad Mahrez",
       "pos": "MID",
-      "team": "Morocco",
-      "flag": "🇲🇦",
-      "rating": 8.7,
-      "points": 2
-    },
-    {
-      "name": "Aubrey Modiba",
-      "pos": "DEF",
-      "team": "South Africa",
-      "flag": "🇿🇦",
-      "rating": 7.5,
-      "points": 6
+      "team": "Algeria",
+      "flag": "🇩🇿",
+      "rating": 9,
+      "points": 12
     }
   ],
-  "totalPoints": 111,
+  "totalPoints": 94,
   "model": "qwen/qwen2.5-omni-7b",
-  "contestId": 10,
-  "decisionRoot": "0x46da30d31f05ce039f7d217c95e3b1613164f69730e3ca768033f6b9ecb278d5",
+  "contestId": 11,
+  "decisionRoot": "0xff4a1eb18cb5dcd23f4ded04b3c5fa1bb0ac28101dad9107ae0699542e92217b",
   "onchain": {
-    "totalPoints": 111,
+    "totalPoints": 94,
     "overrideCount": 0,
     "multiplier": 3,
-    "effectiveScore": 333
+    "effectiveScore": 282
   },
-  "updatedAt": "2026-06-27T18:22:22.313Z"
+  "updatedAt": "2026-06-28T08:47:02.319Z"
 }
