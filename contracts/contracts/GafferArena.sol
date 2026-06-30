@@ -80,7 +80,7 @@ contract GafferArena is ERC721, AccessControl, ReentrancyGuard, Pausable {
     mapping(uint256 => uint256) public listingPrice; // agentId => price (0 = not listed)
     mapping(address => uint256) public pendingWithdrawals;
 
-    string private _base = "https://gafferai.vercel.app/api/nft/";
+    string private _base = "https://gafferai.xyz/api/nft/";
 
     event AgentCreated(uint256 indexed agentId, address indexed owner, string configHash);
     event AgentMinted(uint256 indexed agentId, address indexed owner); // graduated to a tradeable NFT
