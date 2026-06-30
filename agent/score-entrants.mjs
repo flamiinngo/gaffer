@@ -24,8 +24,9 @@ const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const EVM_RPC = process.env.OG_RPC_URL || "https://evmrpc-testnet.0g.ai";
 const INDEXER_RPC = "https://indexer-storage-testnet-turbo.0g.ai";
-const HOST = process.env.SPORTAPI_HOST || "sportapi7.p.rapidapi.com";
-const KEYS = [process.env.SPORTAPI_KEY].filter(Boolean);
+const HOST = (process.env.SPORTAPI_HOST || "sportapi7.p.rapidapi.com").trim();
+// .trim() the key — GitHub secrets often carry a trailing newline, which makes the header invalid (403).
+const KEYS = [process.env.SPORTAPI_KEY].map((k) => k?.trim()).filter(Boolean);
 const TOUR = process.env.WC_TOURNAMENT_ID || "16";
 const SEASON = process.env.WC_SEASON_ID || "58210";
 const dep = JSON.parse(readFileSync(join(here, "..", "contracts", "deployments", "galileo-v2.json"), "utf8"));
@@ -46,12 +47,20 @@ const adminContract = new ethers.Contract(dep.address, ABI, admin);
 const STORAGE_GATEWAY = "https://indexer-storage-testnet-turbo.0g.ai/file?root=";
 
 async function sofa(path) {
+  if (!KEYS.length) throw new Error("no SPORTAPI_KEY set in the environment");
+  let last = "none";
   for (const key of KEYS) {
-    const res = await fetch(`https://${HOST}${path}`, { headers: { "x-rapidapi-host": HOST, "x-rapidapi-key": key } });
-    if (res.status === 429 || res.status === 403) continue;
-    if (res.ok) return res.json();
+    for (let attempt = 0; attempt < 4; attempt++) {
+      try {
+        const res = await fetch(`https://${HOST}${path}`, { headers: { "x-rapidapi-host": HOST, "x-rapidapi-key": key } });
+        if (res.ok) return res.json();
+        last = `HTTP ${res.status}`;
+        if (res.status === 429) { await delay(3000); continue; } // rate limited — back off + retry
+        break; // 403/other — this key won't work, try next
+      } catch (e) { last = e.message; await delay(1500); }
+    }
   }
-  throw new Error("all keys exhausted/limited");
+  throw new Error(`SportAPI failed for ${path} (last: ${last}; ${KEYS.length} key)`);
 }
 const flagOf = (a2) => (!a2 || a2.length !== 2 ? "⚽" : String.fromCodePoint(...[...a2.toUpperCase()].map((c) => 127397 + c.charCodeAt(0))));
 const POS = (p) => (p === "G" ? "GK" : p === "D" ? "DEF" : p === "M" ? "MID" : p === "F" ? "FWD" : null);
