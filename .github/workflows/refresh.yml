@@ -10,7 +10,7 @@ name: Autonomous matchday refresh
 
 on:
   schedule:
-    - cron: "0 6 * * *" # daily at 06:00 UTC
+    - cron: "0 */6 * * *" # every 6 hours (00:00, 06:00, 12:00, 18:00 UTC)
   workflow_dispatch: {}
 
 permissions:
@@ -60,4 +60,4 @@ jobs:
 
       - name: Deploy to Vercel
         working-directory: frontend
-        run: npx --yes vercel@latest --prod --yes --token=${{ secrets.VERCEL_TOKEN }} --scope maamis-projects
+        run: npx --yes vercel@latest --prod --yes --token=${{ secrets.VERCEL_TOKEN }} --scope maami-projects
