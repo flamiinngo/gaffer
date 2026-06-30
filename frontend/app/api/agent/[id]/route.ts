@@ -39,11 +39,25 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     }
   }
 
+  // latest decision (its current XI) — read live from chain + 0G, so the profile shows the pick the
+  // moment it's recorded onchain, with no wait for a static redeploy.
+  let decision: unknown = null;
+  try {
+    const logs = await publicClient.getContractEvents({ address: CONTRACT_ADDRESS, abi: managerAiAbi, eventName: "PointsRecorded", args: { agentId: BigInt(id) }, fromBlock: 0n });
+    const last = logs[logs.length - 1];
+    const root = ((last?.args?.decisionHash as string) ?? "").replace(/^0g:\/\//, "");
+    if (/^0x[0-9a-fA-F]{64}$/.test(root)) {
+      const res = await fetch(STORAGE_GATEWAY + root, { cache: "no-store", signal: AbortSignal.timeout(12000) });
+      if (res.ok) decision = { ...(await res.json()), decisionRoot: root };
+    }
+  } catch { /* not picked yet */ }
+
   const tier = Number(a[8]);
   const price = a[11] as bigint;
   return NextResponse.json({
     agentId: Number(id),
     owner,
+    decision,
     name: cfg?.name ?? cfg?.n ?? `Gaffer #${id}`,
     persona: cfg?.persona ?? cfg?.p ?? null,
     philosophy: cfg?.philosophy ?? cfg?.ph ?? null,

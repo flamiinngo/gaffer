@@ -148,6 +148,8 @@ export function OnboardFlow() {
       });
       await pub.waitForTransactionReceipt({ hash: tx });
       setResult({ tx, configHash, agentId: Number(agentId) });
+      // nudge the matchday action to pick this gaffer now (so its XI lands in ~1–2 min, not 6h)
+      fetch("/api/pick-now", { method: "POST" }).catch(() => {});
     } catch (e) {
       const msg = (e as { shortMessage?: string; message?: string }).shortMessage ?? (e as Error).message ?? "Deploy failed";
       setDeployErr(msg);

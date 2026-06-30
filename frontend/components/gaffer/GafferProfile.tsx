@@ -9,7 +9,7 @@ import { GafferBot } from "@/components/brand/GafferBot";
 import { ProofReceipt } from "@/components/proof/ProofReceipt";
 import { Button } from "@/components/ui/Button";
 import { explorerAddress, CONTRACT_ADDRESS, shortAddr } from "@/lib/chain";
-import { Cpu, Crown, Database, ArrowLeft, Trophy, Star } from "lucide-react";
+import { Cpu, Crown, Database, ArrowLeft, Trophy, Star, Loader2 } from "lucide-react";
 
 type XIPlayer = { name: string; pos: "GK" | "DEF" | "MID" | "FWD"; team: string; flag?: string; points: number; price?: number; pending?: boolean; captain?: boolean };
 type Agent = {
@@ -228,11 +228,16 @@ function Empty() {
   );
 }
 
+type LiveDecision = {
+  formation: string; captain: string; reasoning: string; totalPoints: number;
+  squadValue?: number | null; budget?: number | null; inTheBank?: number | null;
+  decisionRoot?: string; xi: XIPlayer[]; bench?: XIPlayer[];
+};
 type AgentInfo = {
   agentId: number; owner: string; name: string; persona?: string | null;
   tier: number; tierName: string; roundsScored: number; contestsEntered: number;
   careerPoints: number; careerEffective: number; wins: number; overrideCount: number;
-  eligible: boolean; minted: boolean; priceOG: string;
+  eligible: boolean; minted: boolean; priceOG: string; decision?: LiveDecision | null;
 };
 
 /** A gaffer that's deployed onchain but hasn't played a scored matchday yet — read live from chain
@@ -242,21 +247,17 @@ function PendingGafferProfile({ agentId }: { agentId: string }) {
   const [missing, setMissing] = useState(false);
 
   useEffect(() => {
-    // Retry: a just-deployed agent can take a few seconds to be visible on the RPC node we read,
-    // so we poll briefly before concluding it doesn't exist — no 404 flash right after deploy.
+    // Poll live: first to confirm the agent exists (no 404 flash right after deploy), then to watch
+    // for its pick — the moment it's recorded onchain, `decision` appears and the XI renders itself.
     let cancelled = false;
     let tries = 0;
-    const attempt = () => {
+    const tick = () => {
       fetch(`/api/agent/${agentId}`, { cache: "no-store" })
         .then((r) => (r.ok ? r.json() : Promise.reject()))
-        .then((d) => { if (!cancelled) setA(d); })
-        .catch(() => {
-          if (cancelled) return;
-          if (++tries < 6) setTimeout(attempt, 2500);
-          else setMissing(true);
-        });
+        .then((d: AgentInfo) => { if (cancelled) return; setA(d); if (!d.decision) setTimeout(tick, 15000); })
+        .catch(() => { if (cancelled) return; if (++tries < 6) setTimeout(tick, 2500); else setMissing(true); });
     };
-    attempt();
+    tick();
     return () => { cancelled = true; };
   }, [agentId]);
 
@@ -264,6 +265,10 @@ function PendingGafferProfile({ agentId }: { agentId: string }) {
   if (!a) {
     return <div className="mx-auto max-w-7xl px-5 py-10"><div className="skeleton h-40 w-full rounded-[var(--radius-card)]" /></div>;
   }
+
+  const d = a.decision;
+  const slots = d ? slotsFromXI(d.xi) : [];
+  const benchSlots = (d?.bench ?? []).map((p) => ({ name: p.name, team: p.flag ?? p.team ?? "⚽", nation: p.team, pos: p.pos, x: 0, y: 0, points: p.points ?? 0, price: p.price, pending: p.pending }));
 
   return (
     <>
@@ -292,20 +297,41 @@ function PendingGafferProfile({ agentId }: { agentId: string }) {
         </div>
       </div>
 
-      <div className="mx-auto max-w-3xl px-5 py-16 text-center">
-        <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-grass">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-grass" /> Deployed · in the contest
-        </span>
-        <h2 className="display mt-4 text-3xl text-chalk">Waiting for its first matchday</h2>
-        <p className="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-data">
-          {a.name} is onchain and entered. The moment its next World Cup game kicks off, it picks its own XI on
-          0G Compute — and its full scorecard, reasoning and 0G proof land right here.
-        </p>
-        <div className="mt-6 flex justify-center gap-3">
-          <Button href="/contest" variant="primary" size="md">Watch the live arena</Button>
-          <Button href="/dashboard" variant="ghost" size="md">My Gaffers</Button>
+      {d ? (
+        /* its pick landed — show the live XI + reasoning + 0G proof */
+        <div className="mx-auto max-w-7xl px-5 py-8">
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,42fr)_minmax(0,58fr)]">
+            <Pitch xi={slots} formation={d.formation} bench={benchSlots} squadValue={d.squadValue} budget={d.budget} inTheBank={d.inTheBank} />
+            <div className="space-y-4">
+              <div className="card p-5">
+                <div className="text-sm text-data">Captain → <span className="font-bold text-grass">{d.captain?.toUpperCase()}</span> · {d.formation} · <span className="text-gold">{d.totalPoints} pts</span></div>
+                <p className="mt-2 text-[13px] leading-relaxed text-chalk/90">{d.reasoning}</p>
+              </div>
+              <Button href="/verify" variant="ghost" size="md" className="w-full justify-center">Verify this pick on 0G</Button>
+              <p className="text-center text-[11px] text-data">Picked on 0G Compute · scored on real results · anchored onchain. Points fill in as the round concludes.</p>
+            </div>
+          </div>
         </div>
-      </div>
+      ) : (
+        /* deployed, AI is computing its XI right now — auto-updates when it lands */
+        <div className="mx-auto max-w-2xl px-5 py-20 text-center">
+          <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-grass">
+            <Loader2 className="h-3.5 w-3.5 animate-spin" /> Computing on 0G Compute
+          </span>
+          <h2 className="display mt-4 text-3xl text-chalk">{a.name} is picking its team</h2>
+          <p className="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-data">
+            Its AI is choosing its starting XI on <span className="text-chalk">0G Compute</span> right now. This page
+            <span className="text-grass"> updates automatically</span> — no need to refresh. Usually about a minute or two.
+          </p>
+          <div className="mx-auto mt-6 h-1.5 w-full max-w-xs overflow-hidden rounded-full bg-line">
+            <div className="h-full w-1/3 animate-pulse rounded-full bg-grass" />
+          </div>
+          <div className="mt-7 flex justify-center gap-3">
+            <Button href="/contest" variant="ghost" size="md">Watch the live arena</Button>
+            <Button href="/dashboard" variant="ghost" size="md">My Gaffers</Button>
+          </div>
+        </div>
+      )}
     </>
   );
 }
