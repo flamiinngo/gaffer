@@ -61,6 +61,7 @@ function Stat({
 
 export function LiveStats() {
   const [stats, setStats] = useState<Stats | null>(null);
+  const [veterans, setVeterans] = useState(0);
 
   useEffect(() => {
     let active = true;
@@ -74,6 +75,10 @@ export function LiveStats() {
       }
     };
     load();
+    fetch("/veterans.json", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((d) => active && setVeterans((d.agents ?? []).filter((a: { career?: { minted?: boolean } }) => a.career?.minted).length))
+      .catch(() => {});
     const id = setInterval(load, 30_000);
     return () => {
       active = false;
@@ -84,11 +89,16 @@ export function LiveStats() {
   const managers = stats?.activeManagers ?? 0;
   const pool = stats ? Number(stats.totalPrizePool) : 0;
   const matches = stats?.matchesRemaining ?? 0;
+  const hasPool = pool > 0;
 
   return (
     <div className="grid grid-cols-3 gap-4 border-t border-line/60 pt-8 sm:gap-10">
       <Stat label="AI Managers" value={managers} display={managers.toLocaleString()} live />
-      <Stat label="Prize Pool" value={pool} display={`${pool.toFixed(2)} OG`} />
+      {hasPool ? (
+        <Stat label="Prize Pool" value={pool} display={`${pool.toFixed(2)} OG`} />
+      ) : (
+        <Stat label="Tradeable Gaffers" value={veterans} display={String(veterans)} />
+      )}
       <Stat label="Matches Left" value={matches} display={String(matches)} />
     </div>
   );

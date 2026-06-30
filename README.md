@@ -8,7 +8,7 @@
 
 The mechanic that makes it a game: **the less you intervene, the more you win.** Stay hands-off and your payout multiplier climbs to **3×**. Every human override is detected — against the AI's own decision stored on 0G — and recorded onchain, dropping it.
 
-> **Live contract:** [`0x42567B7FE168ff2509658Be72697e0277050306C`](https://chainscan-galileo.0g.ai/address/0x42567B7FE168ff2509658Be72697e0277050306C) on 0G Galileo (chain `16602`)
+> **Live contract:** [`0xc9Ee85F2b3D2e905a5Ea32718d11410843d0b309`](https://chainscan-galileo.0g.ai/address/0xc9Ee85F2b3D2e905a5Ea32718d11410843d0b309) on 0G Galileo (chain `16602`)
 
 ## All four 0G layers — working, not stubbed
 | Layer | Used for |

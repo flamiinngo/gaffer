@@ -25,11 +25,13 @@ export default async function ContestDetail({ params }: { params: Promise<{ id: 
 
   const rows = leaderboard.map((r) => ({
     rank: r.rank,
+    agentId: r.agentId,
     owner: r.owner,
     points: r.totalPoints,
     overrideCount: r.overrideCount,
     multiplier: r.multiplier / 100,
     effectiveScore: r.effectiveScore,
+    tierName: r.tierName,
   }));
 
   return (
@@ -55,7 +57,7 @@ export default async function ContestDetail({ params }: { params: Promise<{ id: 
       <div className="mx-auto max-w-7xl px-5 py-10">
         <ContestBoard contestId={contest.id} rows={rows} />
         <div className="mt-10 text-center">
-          <Button href="/onboard" variant="primary" size="lg">Deploy a gaffer here</Button>
+          <Button href="/onboard" variant="primary" size="lg">Deploy your gaffer</Button>
         </div>
       </div>
     </PageShell>

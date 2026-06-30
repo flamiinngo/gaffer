@@ -1,19 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { clsx } from "clsx";
 import { usePrivy, useWallets } from "@privy-io/react-auth";
-import { createWalletClient, custom, keccak256, toHex, parseEther } from "viem";
+import { createWalletClient, createPublicClient, http, custom, parseEther, parseEventLogs } from "viem";
 import { Button } from "@/components/ui/Button";
-import { GafferMark } from "@/components/brand/Logo";
+import { Pitch, slotsFromXI } from "@/components/pitch/Pitch";
+import { GafferBot } from "@/components/brand/GafferBot";
 import { managerAiAbi } from "@/lib/abi";
 import { ogGalileo, CONTRACT_ADDRESS, explorerTx } from "@/lib/chain";
-import { Check, ChevronLeft, ChevronRight, Sparkles, Trophy, Wallet, Loader2, ExternalLink, ShieldCheck } from "lucide-react";
+import { poolFromProofs, buildPreviewXI, personaFor, type PoolPlayer, type Sliders } from "@/lib/onboardPreview";
+import { Check, ChevronLeft, ChevronRight, Sparkles, Trophy, Loader2, ExternalLink, ShieldCheck, Cpu } from "lucide-react";
 
-const AVATAR_COLORS = [
-  "#00C853", "#FFB700", "#7B8FBF", "#FF3B5C",
-  "#00B8D4", "#AB47BC", "#FF7043", "#26A69A",
-];
 
 const STRATEGY = [
   { key: "attack", label: "Attack vs Defence", left: "Defensive", right: "Attacking", help: "How your gaffer balances the XI." },
@@ -36,19 +34,41 @@ const STEPS = ["Identity", "Strategy", "Contest", "Deploy"];
 export function OnboardFlow() {
   const [step, setStep] = useState(0);
   const [name, setName] = useState("");
-  const [avatar, setAvatar] = useState(0);
-  const [sliders, setSliders] = useState<Record<string, number>>({
+  const [sliders, setSliders] = useState<Sliders>({
     attack: 60, risk: 50, form: 65, rotation: 40,
   });
   const [philosophy, setPhilosophy] = useState("");
   const [contests, setContests] = useState<Contest[] | null>(null);
   const [contestId, setContestId] = useState<number | null>(null);
+  const [pool, setPool] = useState<PoolPlayer[]>([]);
+
+  // live preview of the XI this gaffer would pick, reacting to the strategy sliders
+  const persona = useMemo(() => personaFor(sliders), [sliders]);
+  const preview = useMemo(
+    () => (pool.length ? buildPreviewXI(pool, sliders) : null),
+    [pool, sliders]
+  );
+  const previewSlots = useMemo(
+    () =>
+      preview
+        ? slotsFromXI(preview.xi.map((p) => ({ ...p, captain: p.name === preview.captain })))
+        : [],
+    [preview]
+  );
+
+  useEffect(() => {
+    fetch("/proofs.json", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((d) => setPool(poolFromProofs(d.agents ?? [])))
+      .catch(() => setPool([]));
+  }, []);
 
   const { authenticated, login } = usePrivy();
   const { wallets } = useWallets();
   const [deploying, setDeploying] = useState(false);
+  const [pendingDeploy, setPendingDeploy] = useState(false);
   const [deployErr, setDeployErr] = useState("");
-  const [result, setResult] = useState<{ tx: string; configHash: string } | null>(null);
+  const [result, setResult] = useState<{ tx: string; configHash: string; agentId: number } | null>(null);
 
   useEffect(() => {
     fetch("/api/contests", { cache: "no-store" })
@@ -64,9 +84,27 @@ export function OnboardFlow() {
       .catch(() => setContests([]));
   }, []);
 
+  // Seamless sign-in: clicking deploy while logged out opens Privy, and once the wallet is ready
+  // we continue straight into the deploy — no second click, no relabelled button.
+  useEffect(() => {
+    if (pendingDeploy && authenticated && wallets[0]) {
+      setPendingDeploy(false);
+      void deploy();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pendingDeploy, authenticated, wallets]);
+
+  function onDeploy() {
+    if (!authenticated) {
+      setPendingDeploy(true);
+      login();
+    } else {
+      void deploy();
+    }
+  }
+
   async function deploy() {
     setDeployErr("");
-    if (!authenticated) return login();
     const wallet = wallets[0];
     if (!wallet) return setDeployErr("No wallet found — try signing in again.");
     if (contestId == null) return setDeployErr("Pick a contest first.");
@@ -79,22 +117,37 @@ export function OnboardFlow() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ address }),
       });
-      // 2. commit the manager config (hash recorded onchain; full blob mirrored to 0G by the agent)
-      const config = { name, avatar, strategy: sliders, philosophy, owner: address };
-      const configHash = keccak256(toHex(JSON.stringify(config)));
-      // 3. enter the contest from the user's own wallet
+      // 2. commit a compact brain config onchain so the gaffer's name + persona are always
+      //    recoverable on its profile and the marketplace. (Decision-level proofs anchor to 0G
+      //    Storage each matchday when it actually plays.)
+      const configHash = JSON.stringify({ n: name, p: persona.title, ph: philosophy, s: sliders });
+      // 3. create the agent (a record that earns its way to a tradeable NFT), then enter the contest
       await wallet.switchChain(ogGalileo.id);
       const provider = await wallet.getEthereumProvider();
       const walletClient = createWalletClient({ account: address, chain: ogGalileo, transport: custom(provider) });
+      const pub = createPublicClient({ chain: ogGalileo, transport: http() });
+
+      const createTx = await walletClient.writeContract({
+        address: CONTRACT_ADDRESS,
+        abi: managerAiAbi,
+        functionName: "createAgent",
+        args: [configHash],
+      });
+      const createReceipt = await pub.waitForTransactionReceipt({ hash: createTx });
+      const created = parseEventLogs({ abi: managerAiAbi, eventName: "AgentCreated", logs: createReceipt.logs });
+      const agentId = created[0]?.args.agentId;
+      if (agentId == null) throw new Error("Agent created but id not found — check the explorer.");
+
       const feeWei = chosen ? parseEther(chosen.entryFeeOG || "0") : 0n;
       const tx = await walletClient.writeContract({
         address: CONTRACT_ADDRESS,
         abi: managerAiAbi,
         functionName: "enterContest",
-        args: [BigInt(contestId), `0g://${configHash}`],
+        args: [BigInt(contestId), agentId],
         value: feeWei,
       });
-      setResult({ tx, configHash });
+      await pub.waitForTransactionReceipt({ hash: tx });
+      setResult({ tx, configHash, agentId: Number(agentId) });
     } catch (e) {
       const msg = (e as { shortMessage?: string; message?: string }).shortMessage ?? (e as Error).message ?? "Deploy failed";
       setDeployErr(msg);
@@ -118,6 +171,12 @@ export function OnboardFlow() {
       <div className="card mt-8 p-7 sm:p-9">
         {step === 0 && (
           <Step title="Name your gaffer" sub="Give it an identity. This is who climbs the table.">
+            <div className="mb-5 flex flex-col items-center">
+              <span className="h-32 w-32 overflow-hidden rounded-[var(--radius-card)] border border-line bg-pitch-2">
+                <GafferBot agentId={0} name={name || "your gaffer"} tier={0} size={128} />
+              </span>
+              <p className="mt-2 text-[11px] text-data">Your gaffer-bot — it changes as you name it. This becomes its NFT.</p>
+            </div>
             <input
               autoFocus
               value={name}
@@ -125,40 +184,24 @@ export function OnboardFlow() {
               placeholder="e.g. The Catenaccio Kid"
               className="h-14 w-full rounded-[var(--radius-card)] border border-line bg-pitch px-4 text-lg text-chalk placeholder:text-data/60 focus:border-grass/50 focus:outline-none"
             />
-            <div className="mt-7">
-              <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-data">
-                Choose a crest
-              </p>
-              <div className="grid grid-cols-4 gap-3 sm:grid-cols-8">
-                {AVATAR_COLORS.map((c, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setAvatar(i)}
-                    className={clsx(
-                      "relative grid aspect-square place-items-center rounded-[var(--radius-card)] border transition-all",
-                      avatar === i
-                        ? "scale-105 border-transparent"
-                        : "border-line hover:border-data/50"
-                    )}
-                    style={{
-                      background: `radial-gradient(circle at 50% 38%, ${c}26, var(--color-midfield-2) 72%)`,
-                      boxShadow: avatar === i ? `0 0 0 2px ${c}, 0 0 20px ${c}55` : undefined,
-                    }}
-                    aria-label={`Crest ${i + 1}`}
-                  >
-                    <GafferMark className="h-7 w-8" color={c} />
-                    {avatar === i && (
-                      <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full" style={{ background: c }} />
-                    )}
-                  </button>
-                ))}
-              </div>
-            </div>
+            <p className="mt-3 text-xs text-data">Each name generates a unique gaffer-bot — its colours, eyes and kit are its own. Pick a name you like the look of.</p>
           </Step>
         )}
 
         {step === 1 && (
-          <Step title="Set its football brain" sub="These sliders and your notes become the AI's system prompt.">
+          <Step title="Set its football brain" sub="These sliders and your notes become the AI's system prompt — watch its team take shape as you tune.">
+            <div className="mb-6 flex items-center gap-3 rounded-[var(--radius-card)] border border-grass/25 bg-grass/[0.06] px-4 py-3">
+              <span className="h-14 w-14 shrink-0 overflow-hidden rounded-[var(--radius-data)] bg-pitch-2">
+                <GafferBot agentId={0} name={name || "your gaffer"} tier={0} size={56} />
+              </span>
+              <div>
+                <div className="text-[11px] uppercase tracking-wider text-data">Emerging personality</div>
+                <div className="text-base font-semibold text-chalk">
+                  {name?.trim() ? `${name} · ` : ""}<span className="text-grass">{persona.title}</span>
+                </div>
+                <div className="text-xs text-data">&ldquo;{persona.tagline}&rdquo;</div>
+              </div>
+            </div>
             <div className="space-y-6">
               {STRATEGY.map((s) => (
                 <div key={s.key}>
@@ -193,6 +236,25 @@ export function OnboardFlow() {
                 />
               </div>
             </div>
+
+            {/* live preview — the XI this brain would pick from the current matchday pool */}
+            {previewSlots.length > 0 && (
+              <div className="mt-7">
+                <div className="mb-3 flex items-center justify-between">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-data">
+                    Sample XI · preview only
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-line/50 px-2.5 py-0.5 text-[11px] font-semibold text-data">
+                    {preview?.formation}
+                  </span>
+                </div>
+                <Pitch xi={previewSlots} formation={preview?.formation ?? "4-3-3"} />
+                <p className="mt-2 flex items-center gap-1.5 text-center text-[11px] leading-relaxed text-data">
+                  <Cpu className="h-3.5 w-3.5 text-grass" />
+                  Not live yet — this is a taste of how your sliders shape its style. Once deployed, <span className="text-chalk">your gaffer makes its own real pick on 0G Compute</span> each matchday and gets sharper from its results.
+                </p>
+              </div>
+            )}
           </Step>
         )}
 
@@ -245,12 +307,13 @@ export function OnboardFlow() {
             {result ? (
               <div className="space-y-5">
                 <div className="flex flex-col items-center gap-3 rounded-[var(--radius-card)] border border-grass/30 bg-grass/5 px-6 py-8 text-center">
-                  <span className="grid h-14 w-14 place-items-center rounded-full bg-grass/15 text-grass">
-                    <ShieldCheck className="h-7 w-7" />
+                  <span className="h-28 w-28 overflow-hidden rounded-[var(--radius-card)] border border-grass/30 bg-pitch-2">
+                    <GafferBot agentId={result.agentId} name={name} tier={0} size={112} />
                   </span>
                   <div>
                     <h3 className="text-lg font-semibold text-chalk">{name} is live</h3>
-                    <p className="mt-1 text-sm text-data">Entered onchain. Your gaffer now competes autonomously.</p>
+                    <p className="mt-0.5 text-sm font-semibold text-grass">{persona.title} · Rookie · Season 1</p>
+                    <p className="mt-1.5 text-sm text-data">Its brain is committed to 0G. From here it picks, scores and builds a verifiable career — autonomously. The longer you trust it, the more it&apos;s worth.</p>
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -259,16 +322,31 @@ export function OnboardFlow() {
                     <span className="mono flex items-center gap-1.5 text-grass">{result.tx.slice(0, 12)}… <ExternalLink className="h-3.5 w-3.5" /></span>
                   </a>
                   <div className="flex items-center justify-between rounded-[var(--radius-data)] border border-line bg-pitch px-4 py-3 text-sm">
-                    <span className="text-data">Config commitment</span>
-                    <span className="mono text-gold">{result.configHash.slice(0, 10)}…{result.configHash.slice(-6)}</span>
+                    <span className="text-data">Your agent</span>
+                    <span className="mono text-gold">#{result.agentId}</span>
+                  </div>
+                  <div className="flex items-center justify-between rounded-[var(--radius-data)] border border-line bg-pitch px-4 py-3 text-sm">
+                    <span className="text-data">Brain committed</span>
+                    <span className="font-semibold text-gold">{persona.title}</span>
                   </div>
                 </div>
-                <Button href="/dashboard" variant="primary" size="lg" className="w-full">Watch it play →</Button>
+                <div className="flex gap-3">
+                  <Button href={`/gaffer/${result.agentId}`} variant="primary" size="lg" className="flex-1 justify-center">View your gaffer →</Button>
+                  <Button href="/dashboard" variant="ghost" size="lg" className="justify-center">My Gaffers</Button>
+                </div>
               </div>
             ) : (
               <>
+                <div className="mb-5 flex items-center gap-3 rounded-[var(--radius-card)] border border-line bg-pitch-2 px-4 py-3">
+                  <span className="h-16 w-16 shrink-0 overflow-hidden rounded-[var(--radius-data)] bg-pitch"><GafferBot agentId={0} name={name || "your gaffer"} tier={0} size={64} /></span>
+                  <div>
+                    <div className="text-base font-semibold text-chalk">{name || "Your gaffer"}</div>
+                    <div className="text-xs text-grass">{persona.title} · about to go onchain</div>
+                  </div>
+                </div>
                 <div className="space-y-3">
                   <Summary label="Gaffer" value={name || "—"} />
+                  <Summary label="Personality" value={persona.title} />
                   <Summary label="Strategy" value={`ATK ${sliders.attack} · RISK ${sliders.risk} · FORM ${sliders.form} · ROT ${sliders.rotation}`} mono />
                   <Summary label="Contest" value={chosen?.name ?? "—"} />
                   <Summary label="Entry fee" value={chosen ? `${Number(chosen.entryFeeOG).toFixed(2)} OG` : "—"} accent />
@@ -283,16 +361,14 @@ export function OnboardFlow() {
                   <p className="mt-4 rounded-[var(--radius-data)] border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger">{deployErr}</p>
                 )}
 
-                <Button variant="primary" size="lg" className="mt-6 w-full" onClick={deploy} disabled={deploying}>
-                  {deploying ? (
+                <Button variant="primary" size="lg" className="mt-6 w-full" onClick={onDeploy} disabled={deploying || pendingDeploy}>
+                  {deploying || pendingDeploy ? (
                     <><Loader2 className="h-4 w-4 animate-spin" /> Deploying…</>
-                  ) : !authenticated ? (
-                    <><Wallet className="h-4 w-4" /> Sign in to deploy</>
                   ) : (
-                    <><Sparkles className="h-4 w-4" /> Deploy gaffer</>
+                    <><Sparkles className="h-4 w-4" /> Deploy your gaffer</>
                   )}
                 </Button>
-                <p className="mt-2 text-center text-[11px] text-data">Email or wallet — both work. We sponsor the gas.</p>
+                <p className="mt-2 text-center text-[11px] text-data">Email or wallet — both work, and we sponsor the gas. You&apos;ll sign in once if you haven&apos;t already.</p>
               </>
             )}
           </Step>

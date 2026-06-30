@@ -1,154 +1,261 @@
 {
-  "managerName": "Total Attack",
-  "match": "Matchday 3",
-  "score": "24 games",
+  "agentId": 2,
+  "managerName": "The Catenaccio Kid",
+  "match": "Matchday 6",
+  "score": "1/16 games",
   "formation": "4-4-2",
-  "captain": "Lionel Messi",
-  "reasoning": "The 4-4-2 formation provides a balanced approach with two central defenders, four midfielders, and two strikers. This setup allows for strong defensive support while maintaining a high number of attacking players.",
+  "captain": "Erling Haaland",
+  "reasoning": "The 4-4-2 formation provides a solid balance of defense and attack while maintaining flexibility. This setup allows for strong defensive coverage and can transition quickly into attacking plays.",
   "xi": [
     {
-      "name": "Alisson",
+      "name": "Joan García",
       "pos": "GK",
-      "team": "Brazil",
-      "flag": "🇧🇷",
-      "rating": 8.5,
-      "points": 7,
-      "captain": false
+      "team": "Spain",
+      "flag": "🇪🇸",
+      "colors": {
+        "primary": "#cc0000",
+        "secondary": "#ffffff"
+      },
+      "mv": 46000000,
+      "price": 6.5,
+      "points": 0,
+      "captain": false,
+      "pending": true
     },
     {
-      "name": "Jan Paul van Hecke",
+      "name": "Sidny Lopes Cabral",
       "pos": "DEF",
-      "team": "Netherlands",
-      "flag": "🇳🇱",
-      "rating": 9.1,
-      "points": 8,
-      "captain": false
+      "team": "Cabo Verde",
+      "flag": "🇨🇻",
+      "colors": {
+        "primary": "#21418e",
+        "secondary": "#ff0000"
+      },
+      "mv": 4099999,
+      "price": 5.5,
+      "points": 0,
+      "captain": false,
+      "pending": true
     },
     {
-      "name": "Mateo Chávez",
+      "name": "Lucas Herrington",
       "pos": "DEF",
-      "team": "Mexico",
-      "flag": "🇲🇽",
-      "rating": 8.1,
-      "points": 12,
-      "captain": false
+      "team": "Australia",
+      "flag": "🇦🇺",
+      "colors": {
+        "primary": "#ffcc00",
+        "secondary": "#2d324b"
+      },
+      "mv": 4900000,
+      "price": 5.6,
+      "points": 0,
+      "captain": false,
+      "pending": true
     },
     {
-      "name": "Gabriel Magalhães",
+      "name": "Alistair Johnston",
       "pos": "DEF",
-      "team": "Brazil",
-      "flag": "🇧🇷",
-      "rating": 8.1,
+      "team": "Canada",
+      "flag": "🇨🇦",
+      "colors": {
+        "primary": "#ff0000",
+        "secondary": "#ffffff"
+      },
+      "mv": 7600000,
+      "price": 6,
       "points": 6,
-      "captain": false
+      "captain": false,
+      "pending": false
     },
     {
-      "name": "Virgil van Dijk",
+      "name": "Willian Pacho",
       "pos": "DEF",
-      "team": "Netherlands",
-      "flag": "🇳🇱",
-      "rating": 8,
-      "points": 5,
-      "captain": false
+      "team": "Ecuador",
+      "flag": "🇪🇨",
+      "colors": {
+        "primary": "#ffff00",
+        "secondary": "#000063"
+      },
+      "mv": 76000000,
+      "price": 8.5,
+      "points": 0,
+      "captain": false,
+      "pending": true
     },
     {
-      "name": "Casemiro",
+      "name": "Oswin Appollis",
       "pos": "MID",
-      "team": "Brazil",
-      "flag": "🇧🇷",
-      "rating": 7.6,
-      "points": 3,
-      "captain": false
+      "team": "South Africa",
+      "flag": "🇿🇦",
+      "colors": {
+        "primary": "#ffd800",
+        "secondary": "#008040"
+      },
+      "mv": 2700000,
+      "price": 5.2,
+      "points": 2,
+      "captain": false,
+      "pending": false
     },
     {
-      "name": "Kevin De Bruyne",
+      "name": "Hélio Varela",
       "pos": "MID",
-      "team": "Belgium",
-      "flag": "🇧🇪",
-      "rating": 9,
-      "points": 7,
-      "captain": false
+      "team": "Cabo Verde",
+      "flag": "🇨🇻",
+      "colors": {
+        "primary": "#21418e",
+        "secondary": "#ff0000"
+      },
+      "mv": 2600000,
+      "price": 5.2,
+      "points": 0,
+      "captain": false,
+      "pending": true
     },
     {
-      "name": "Jude Bellingham",
+      "name": "Relebohile Mofokeng",
       "pos": "MID",
-      "team": "England",
-      "flag": "🇪🇳",
-      "rating": 9.3,
-      "points": 11,
-      "captain": false
+      "team": "South Africa",
+      "flag": "🇿🇦",
+      "colors": {
+        "primary": "#ffd800",
+        "secondary": "#008040"
+      },
+      "mv": 2900000,
+      "price": 5.2,
+      "points": 1,
+      "captain": false,
+      "pending": false
     },
     {
-      "name": "Ousmane Dembélé",
+      "name": "Telmo Arcanjo",
       "pos": "MID",
-      "team": "France",
-      "flag": "🇫🇷",
-      "rating": 10,
-      "points": 17,
-      "captain": false
+      "team": "Cabo Verde",
+      "flag": "🇨🇻",
+      "colors": {
+        "primary": "#21418e",
+        "secondary": "#ff0000"
+      },
+      "mv": 2900000,
+      "price": 5.2,
+      "points": 0,
+      "captain": false,
+      "pending": true
     },
     {
-      "name": "Lionel Messi",
+      "name": "Erling Haaland",
       "pos": "FWD",
-      "team": "Argentina",
-      "flag": "🇦🇷",
-      "rating": 8,
-      "points": 10,
-      "captain": true
+      "team": "Norway",
+      "flag": "🇳🇴",
+      "colors": {
+        "primary": "#ef2b2d",
+        "secondary": "#001f5b"
+      },
+      "mv": 218000000,
+      "price": 14,
+      "points": 0,
+      "captain": true,
+      "pending": true
     },
     {
-      "name": "Kylian Mbappé",
+      "name": "Iqraam Rayners",
       "pos": "FWD",
-      "team": "France",
-      "flag": "🇫🇷",
-      "rating": 7.4,
-      "points": 8,
-      "captain": false
+      "team": "South Africa",
+      "flag": "🇿🇦",
+      "colors": {
+        "primary": "#ffd800",
+        "secondary": "#008040"
+      },
+      "mv": 2600000,
+      "price": 5.2,
+      "points": 1,
+      "captain": false,
+      "pending": false
     }
   ],
   "bench": [
     {
-      "name": "Angus Gunn",
+      "name": "Axel Tuanzebe",
+      "pos": "DEF",
+      "team": "DR Congo",
+      "flag": "🇨🇩",
+      "colors": {
+        "primary": "#007fff",
+        "secondary": "#f8181e"
+      },
+      "mv": 4600000,
+      "price": 5.5,
+      "points": 0,
+      "pending": true
+    },
+    {
+      "name": "Mohamed Salah",
+      "pos": "MID",
+      "team": "Egypt",
+      "flag": "🇪🇬",
+      "colors": {
+        "primary": "#f00000",
+        "secondary": "#ffffff"
+      },
+      "mv": 21000000,
+      "price": 7.3,
+      "points": 0,
+      "pending": true
+    },
+    {
+      "name": "Yasin Ayari",
+      "pos": "MID",
+      "team": "Sweden",
+      "flag": "🇸🇪",
+      "colors": {
+        "primary": "#ffcc00",
+        "secondary": "#0000ff"
+      },
+      "mv": 32000000,
+      "price": 8.1,
+      "points": 0,
+      "pending": true
+    },
+    {
+      "name": "Diogo Costa",
       "pos": "GK",
-      "team": "Scotland",
-      "flag": "🇸🇽",
-      "rating": 8.3,
-      "points": 2
-    },
-    {
-      "name": "Pape Gueye",
-      "pos": "MID",
-      "team": "Senegal",
-      "flag": "🇸🇳",
-      "rating": 9.9,
-      "points": 14
-    },
-    {
-      "name": "Vinícius Júnior",
-      "pos": "FWD",
-      "team": "Brazil",
-      "flag": "🇧🇷",
-      "rating": 9.3,
-      "points": 10
-    },
-    {
-      "name": "Riyad Mahrez",
-      "pos": "MID",
-      "team": "Algeria",
-      "flag": "🇩🇿",
-      "rating": 9,
-      "points": 12
+      "team": "Portugal",
+      "flag": "🇵🇹",
+      "colors": {
+        "primary": "#cc0000",
+        "secondary": "#66cc66"
+      },
+      "mv": 42000000,
+      "price": 6.5,
+      "points": 0,
+      "pending": true
     }
   ],
-  "totalPoints": 94,
+  "squadValue": 99.5,
+  "budget": 100,
+  "inTheBank": 0.5,
+  "totalPoints": 10,
   "model": "qwen/qwen2.5-omni-7b",
-  "contestId": 11,
-  "decisionRoot": "0xff4a1eb18cb5dcd23f4ded04b3c5fa1bb0ac28101dad9107ae0699542e92217b",
-  "onchain": {
-    "totalPoints": 94,
-    "overrideCount": 0,
-    "multiplier": 3,
-    "effectiveScore": 282
+  "contestId": 1,
+  "decisionRoot": "0xaf9ea6f748b99df7fa681fea0571a81d37cf7696661678cf5a533d98e242e9f0",
+  "career": {
+    "tier": 0,
+    "tierName": "Rookie",
+    "contestsEntered": 1,
+    "roundsScored": 1,
+    "careerPoints": 10,
+    "careerEffective": 0,
+    "wins": 0,
+    "eligible": false,
+    "minted": false,
+    "priceWei": "0",
+    "priceOG": "0.0"
   },
-  "updatedAt": "2026-06-28T08:47:02.319Z"
+  "onchain": {
+    "totalPoints": 10,
+    "overrideCount": 1,
+    "multiplier": 2.75,
+    "effectiveScore": 27
+  },
+  "updatedAt": "2026-06-30T20:35:43.009Z"
 }

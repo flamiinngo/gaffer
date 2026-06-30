@@ -1,14 +1,15 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
 import { Button } from "@/components/ui/Button";
 import { LiveStats } from "@/components/landing/LiveStats";
+import { HomeShowcase } from "@/components/landing/HomeShowcase";
+import { HomeMarket } from "@/components/landing/HomeMarket";
 import { MultiplierGauge } from "@/components/landing/MultiplierGauge";
 import { UpcomingMatches } from "@/components/landing/UpcomingMatches";
-import { Competition } from "@/components/landing/Competition";
-import { COMPETITIONS } from "@/lib/competitions";
 import { CONTRACT_ADDRESS, EXPLORER_URL, shortAddr } from "@/lib/chain";
-import { ArrowRight, Brain, Cpu, ShieldCheck, Workflow, Database, Zap } from "lucide-react";
+import { ArrowRight, Brain, Cpu, ShieldCheck, Workflow, Database, Zap, Check } from "lucide-react";
 
 export default function Home() {
   return (
@@ -17,10 +18,10 @@ export default function Home() {
       <main className="flex-1">
         <Hero />
         <StatsStrip />
-        <Competitions />
+        <HomeShowcase />
+        <HomeMarket />
         <HowItWorks />
         <Multiplier />
-        <Competition />
         <ScheduleAndVerify />
         <TechStack />
       </main>
@@ -73,13 +74,14 @@ function Hero() {
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <Button href="/onboard" variant="primary" size="lg" className="group">
-              Deploy Your Gaffer
+              Deploy your gaffer
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </Button>
             <Button href="/dashboard" variant="ghost" size="lg">
-              Watch It Play
+              Watch it play
             </Button>
           </div>
+          <p className="mt-4 text-sm text-data">Watch live — no sign-up. Deploy in one click.</p>
         </div>
       </div>
     </section>
@@ -91,39 +93,6 @@ function StatsStrip() {
     <section className="relative z-10 border-y border-line/60 bg-pitch-2/70 backdrop-blur">
       <div className="mx-auto max-w-3xl px-5 py-8">
         <LiveStats />
-      </div>
-    </section>
-  );
-}
-
-function Competitions() {
-  return (
-    <section className="mx-auto max-w-7xl px-5 py-14">
-      <p className="mb-6 text-center text-xs font-semibold uppercase tracking-[0.2em] text-data">
-        A gaffer for every competition.
-      </p>
-      <div className="flex flex-wrap items-center justify-center gap-3">
-        {COMPETITIONS.map((c) => {
-          const live = c.id === "wc-2026";
-          return (
-            <div key={c.id} className={`card flex items-center gap-3 px-5 py-3 ${live ? "card-hover" : "opacity-70"}`}>
-              <span className="text-2xl" aria-hidden>{c.emblem}</span>
-              <div className="text-left">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-semibold text-chalk">{c.name}</span>
-                  {live ? (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-grass/12 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-grass">
-                      <span className="h-1 w-1 rounded-full bg-grass" /> Live
-                    </span>
-                  ) : (
-                    <span className="rounded-full bg-line/50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-data">Soon</span>
-                  )}
-                </div>
-                <div className="text-xs text-data">{c.season}</div>
-              </div>
-            </div>
-          );
-        })}
       </div>
     </section>
   );
@@ -221,20 +190,19 @@ function ScheduleAndVerify() {
           <SectionHeading kicker="Verify anything" title="Don't trust. Verify." align="left" />
           <p className="mt-4 text-[15px] leading-relaxed text-data">
             Every pick your AI makes — and the exact reasoning behind it — is written to 0G Storage
-            and proven on 0G&apos;s data availability layer. No black box. Search any manager and read
-            its mind.
+            and anchored onchain. No black box. Open any gaffer and hit{" "}
+            <span className="text-grass">Verify on 0G</span> to re-fetch its decision from Storage,
+            decode the anchoring transaction, and watch all four layers prove green — live.
           </p>
-          <div className="mono mt-6 space-y-2 rounded-[var(--radius-card)] border border-line bg-pitch p-5 text-[13px] leading-relaxed">
-            <div className="text-data">[14:32 UTC] Analyzing Bellingham vs. low block...</div>
-            <div className="text-chalk">Form: 8.4 avg last 3. Opponent: 2 clean sheets.</div>
-            <div className="text-grass">Decision: CAPTAIN · Confidence 87%</div>
-            <div className="text-data">
-              Stored: <span className="text-gold">0g://a3f2c…91b</span>
-            </div>
+          <div className="mt-6 space-y-2.5 rounded-[var(--radius-card)] border border-line bg-pitch p-5">
+            <ProofLine layer="0G Storage" detail="Decision JSON re-fetched by its content-addressed root hash" />
+            <ProofLine layer="0G Chain" detail="Same root confirmed in the recording transaction" />
+            <ProofLine layer="0G Compute" detail="The model that named the XI" />
+            <ProofLine layer="0G DA" detail="Decision payload published & available" />
           </div>
           <div className="mt-6 flex flex-wrap gap-3">
-            <Button href="/verify" variant="ghost" size="md">
-              <ShieldCheck className="h-4 w-4" /> Explore decisions
+            <Button href="/contest" variant="ghost" size="md">
+              <ShieldCheck className="h-4 w-4" /> Verify a live gaffer
             </Button>
             <Button
               href={`${EXPLORER_URL}/address/${CONTRACT_ADDRESS}`}
@@ -280,7 +248,7 @@ function TechStack() {
             Deploy in under two minutes. No lineups to set, ever again.
           </p>
           <Button href="/onboard" variant="primary" size="lg" className="group">
-            Deploy Your Manager
+            Deploy your gaffer
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           </Button>
         </div>
@@ -307,6 +275,20 @@ function SectionHeading({
       <span className="text-xs font-semibold uppercase tracking-[0.2em] text-grass">{kicker}</span>
       <h2 className="display mt-3 text-4xl text-chalk sm:text-5xl">{title}</h2>
       {sub && <p className="mt-3 text-sm text-data">{sub}</p>}
+    </div>
+  );
+}
+
+function ProofLine({ layer, detail }: { layer: string; detail: string }) {
+  return (
+    <div className="flex items-center gap-3">
+      <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full border border-grass/40 bg-grass/10">
+        <Check className="h-3.5 w-3.5 text-grass" />
+      </span>
+      <div className="min-w-0">
+        <span className="text-sm font-semibold text-chalk">{layer}</span>
+        <span className="ml-2 text-[13px] text-data">{detail}</span>
+      </div>
     </div>
   );
 }

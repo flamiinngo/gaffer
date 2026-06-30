@@ -11,7 +11,8 @@ import { AuthButton } from "@/components/auth/AuthButton";
 
 const NAV = [
   { label: "Contests", href: "/contest" },
-  { label: "Live", href: "/dashboard" },
+  { label: "Market", href: "/market" },
+  { label: "My Gaffers", href: "/dashboard" },
   { label: "Verify", href: "/verify" },
   { label: "Developers", href: "/developers" },
 ];
@@ -50,7 +51,7 @@ export function Navbar() {
             <AuthButton />
           </div>
           <Button href="/onboard" variant="primary" size="sm">
-            Deploy
+            Deploy your gaffer
           </Button>
           <button
             onClick={() => setOpen((o) => !o)}

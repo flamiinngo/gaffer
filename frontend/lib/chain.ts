@@ -21,9 +21,9 @@ export const ogGalileo = defineChain({
   testnet: true,
 });
 
-/** Deployed ManagerAI contract on 0G Galileo. */
+/** Deployed GafferArena (v2) contract on 0G Galileo — agents are NFTs with careers + marketplace. */
 export const CONTRACT_ADDRESS = (process.env.NEXT_PUBLIC_CONTRACT_ADDRESS ??
-  "0x42567B7FE168ff2509658Be72697e0277050306C") as `0x${string}`;
+  "0xc9Ee85F2b3D2e905a5Ea32718d11410843d0b309") as `0x${string}`;
 
 export function explorerTx(hash: string) {
   return `${EXPLORER_URL}/tx/${hash}`;

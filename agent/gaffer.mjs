@@ -32,16 +32,22 @@ const EVM_RPC = process.env.OG_RPC_URL || "https://evmrpc-testnet.0g.ai";
 const INDEXER_RPC = "https://indexer-storage-testnet-turbo.0g.ai";
 const HOST = process.env.SPORTAPI_HOST || "sportapi7.p.rapidapi.com";
 const KEYS = [process.env.SPORTAPI_KEY, process.env.SPORTAPI_KEY_2, process.env.SPORTAPI_KEY_3, process.env.SPORTAPI_KEY_4, process.env.SPORTAPI_KEY_5].filter(Boolean);
-const dep = JSON.parse(readFileSync(join(here, "..", "contracts", "deployments", "galileo.json"), "utf8"));
+const dep = JSON.parse(readFileSync(join(here, "..", "contracts", "deployments", "galileo-v2.json"), "utf8"));
 const CFG_DIR = join(homedir(), ".gaffer");
 const CFG = join(CFG_DIR, "config.json");
-const OPEN_CONTEST = Number(process.env.OPEN_CONTEST_ID || 4);
+const OPEN_CONTEST = Number(process.env.OPEN_CONTEST_ID || 1);
 
+// GafferArena v2: agents are NFTs (agentId/tokenId). A CLI gaffer creates an agent, enters by id,
+// and is scored by id — same arena, same autonomy rules as the web app.
 const ABI = [
-  "function enterContest(uint256,string) payable",
-  "function recordPoints(uint256,address,uint256,uint256,string)",
-  "function recordOverride(uint256,address)",
-  "function getManager(uint256,address) view returns (string,uint256,uint256,uint256,uint256,uint256,bool)",
+  "function nextContestId() view returns (uint256)",
+  "function nextAgentId() view returns (uint256)",
+  "function createAgent(string) returns (uint256)",
+  "function enterContest(uint256,uint256) payable",
+  "function recordPoints(uint256,uint256,uint256,uint256,string)",
+  "function recordOverride(uint256,uint256)",
+  "function getEntry(uint256,uint256) view returns (bool,uint256,uint256,uint256,uint256,uint256)",
+  "function getAgent(uint256) view returns (address,string,uint256,uint256,uint256,uint256,uint256,uint256,uint256,bool,bool,uint256)",
 ];
 
 const arg = (name, d) => { const i = process.argv.indexOf(`--${name}`); return i > -1 ? process.argv[i + 1] : d; };
@@ -109,22 +115,28 @@ async function cmdStatus() {
   const w = wallet(); const p = provider();
   log(`\n${C.b}${c.name || "Gaffer"}${C.x}  ${C.dim}${c.address}${C.x}`);
   log(`balance: ${ethers.formatEther(await p.getBalance(c.address))} OG`);
-  if (c.contestId) {
+  if (c.contestId && c.agentId) {
     const ct = new ethers.Contract(dep.address, ABI, p);
-    const m = await ct.getManager(c.contestId, c.address);
-    log(`contest #${c.contestId}: ${C.g}${m[1]} pts${C.x}  ×${Number(m[3]) / 100} mult  ${C.gold}${m[4]} effective${C.x}  (${m[2]} overrides)`);
+    const e = await ct.getEntry(c.contestId, c.agentId);
+    const ag = await ct.getAgent(c.agentId);
+    const tiers = ["Rookie", "Pro", "Elite", "Legend"];
+    log(`agent #${c.agentId}  ${C.dim}${tiers[Number(ag[8])]} · ${ag[3]} rounds · ${ag[6]} wins${C.x}`);
+    log(`contest #${c.contestId}: ${C.g}${e[1]} pts${C.x}  ×${Number(e[3]) / 100} mult  ${C.gold}${e[4]} effective${C.x}  (${e[2]} overrides)`);
   } else log(`${C.dim}not deployed yet — run: gaffer deploy --name "X"${C.x}`);
 }
 async function cmdDeploy() {
   const c = loadCfg(); if (!c) return log(`${C.r}Run \`gaffer init\` first.${C.x}`);
   const w = wallet(); const name = arg("name", c.name || "Terminal Gaffer"); const contestId = Number(arg("contest", OPEN_CONTEST));
-  log(`\n${C.dim}storing config on 0G…${C.x}`);
-  const configRoot = await storeJSON(w, { name, strategy: arg("strategy", "balanced attacking"), owner: w.address });
+  const strategy = arg("strategy", "balanced attacking");
+  log(`\n${C.dim}committing the gaffer's brain to 0G…${C.x}`);
+  const configRoot = await storeJSON(w, { name, strategy, owner: w.address });
   const ct = new ethers.Contract(dep.address, ABI, w);
-  const tx = await ct.enterContest(contestId, `0g://${configRoot}`, { value: 0 });
+  const agentId = Number(await ct.nextAgentId());
+  const ctx = await ct.createAgent(`0g://${configRoot}`); await waitTx(provider(), ctx.hash);
+  const tx = await ct.enterContest(contestId, agentId, { value: 0 });
   await waitTx(provider(), tx.hash);
-  saveCfg({ ...c, name, contestId });
-  log(`${C.g}✓${C.x} ${name} entered contest #${contestId}  ${C.dim}tx ${tx.hash.slice(0, 14)}…${C.x}`);
+  saveCfg({ ...c, name, strategy, contestId, agentId });
+  log(`${C.g}✓${C.x} ${name} ${C.dim}(agent #${agentId})${C.x} entered contest #${contestId}  ${C.dim}tx ${tx.hash.slice(0, 14)}…${C.x}`);
 }
 async function cmdRun() {
   const c = loadCfg(); if (!c?.contestId) return log(`${C.r}Deploy first: gaffer deploy --name "X"${C.x}`);
@@ -137,12 +149,12 @@ async function cmdRun() {
   const lu = await sofa(`/api/v1/event/${g.id}/lineups`); const stats = new Map();
   for (const s of ["home", "away"]) for (const p of lu[s]?.players ?? []) stats.set(norm(p.player.name), p.statistics ?? {});
   let total = 0; const xiScored = xi.map((p) => { const conc = p.team === g.homeTeam.name ? as : hs; const pts = fpl(stats.get(norm(p.name)) ?? {}, p.pos, conc, p.name === captain); total += pts; return { ...p, points: pts, captain: p.name === captain }; });
-  const decisionRoot = await storeJSON(w, { manager: w.address, managerName: c.name, matchId: g.id, captain, reasoning, xi: xiScored, totalPoints: total, model, ts: new Date().toISOString() });
+  const decisionRoot = await storeJSON(w, { manager: w.address, agentId: c.agentId, managerName: c.name, matchId: g.id, captain, reasoning, xi: xiScored, totalPoints: total, model, ts: new Date().toISOString() });
   saveCfg({ ...c, lastDecision: { root: decisionRoot, matchId: g.id, captain, xi: xiScored.map((p) => ({ name: p.name, pos: p.pos, captain: p.captain })), total } });
   // resolver records points (admin key from repo .env acts as protocol resolver in this demo)
   const resolverKey = process.env.PRIVATE_KEY || JSON.parse(readFileSync(join(here, "..", ".deployer-wallet.json"), "utf8")).privateKey;
   const rc = new ethers.Contract(dep.address, ABI, new ethers.Wallet(resolverKey, provider()));
-  const rt = await rc.recordPoints(c.contestId, w.address, g.id, total, `0g://${decisionRoot}`); await waitTx(provider(), rt.hash);
+  const rt = await rc.recordPoints(c.contestId, c.agentId, g.id, total, `0g://${decisionRoot}`); await waitTx(provider(), rt.hash);
   log(`\n${C.g}${C.b}PICK · 4-3-3 · captain ${captain}${C.x}`);
   for (const p of xiScored) log(`  ${p.pos.padEnd(3)} ${p.name}${p.captain ? ` ${C.gold}(C)${C.x}` : ""}  ${C.dim}${p.points} pts${C.x}`);
   log(`\n${C.g}✓${C.x} ${total} pts recorded onchain  ${C.dim}reasoning 0g://${decisionRoot.slice(2, 12)}…${C.x}`);
@@ -155,14 +167,14 @@ async function cmdOverride() {
   if (norm(newCap) === norm(aiCap)) return log(`${C.dim}That's already the AI's captain — no interference.${C.x}`);
   const w = wallet(); const p = provider();
   const ct = new ethers.Contract(dep.address, ABI, p);
-  const before = await ct.getManager(c.contestId, c.address);
+  const before = await ct.getEntry(c.contestId, c.agentId);
   log(`\n${C.gold}Human override detected.${C.x}`);
   log(`   AI captained ${C.cy}${aiCap}${C.x} → you forced ${C.cy}${newCap}${C.x}`);
   log(`   ${C.dim}This deviates from the AI's 0G-stored decision (0g://${c.lastDecision.root.slice(2, 12)}…) — it is recorded onchain.${C.x}`);
   const resolverKey = process.env.PRIVATE_KEY || JSON.parse(readFileSync(join(here, "..", ".deployer-wallet.json"), "utf8")).privateKey;
   const rc = new ethers.Contract(dep.address, ABI, new ethers.Wallet(resolverKey, p));
-  const tx = await rc.recordOverride(c.contestId, c.address); await waitTx(p, tx.hash);
-  const after = await ct.getManager(c.contestId, c.address);
+  const tx = await rc.recordOverride(c.contestId, c.agentId); await waitTx(p, tx.hash);
+  const after = await ct.getEntry(c.contestId, c.agentId);
   log(`\n   multiplier: ${C.r}${Number(before[3]) / 100}x → ${Number(after[3]) / 100}x${C.x}`);
   log(`   effective score: ${Number(before[4])} → ${C.gold}${Number(after[4])}${C.x}`);
   log(`   ${C.dim}The more you meddle, the less you win. That's the deal.${C.x}`);

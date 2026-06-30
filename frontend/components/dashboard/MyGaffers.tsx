@@ -2,34 +2,32 @@
 
 import { useEffect, useState } from "react";
 import { usePrivy } from "@privy-io/react-auth";
-import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { GafferMark } from "@/components/brand/Logo";
-import { LiveDashboard } from "@/components/dashboard/LiveDashboard";
+import { GafferCard } from "@/components/brand/GafferCard";
 import { explorerAddress, shortAddr } from "@/lib/chain";
-import { Plus, Trophy, ShieldCheck, AlertTriangle, ArrowRight, Radio } from "lucide-react";
+import { Plus, Trophy, ShieldCheck, Sparkles, Tag } from "lucide-react";
 
 type Gaffer = {
-  contestId: number;
-  contestName: string;
-  status: "UPCOMING" | "LIVE" | "ENDED";
-  points: number;
-  overrideCount: number;
-  multiplier: number;
-  effectiveScore: number;
-  rank: number;
-  participants: number;
+  agentId: number;
+  tier: number;
+  tierName: string;
+  roundsScored: number;
+  contestsEntered: number;
+  careerPoints: number;
+  wins: number;
+  eligible: boolean;
+  minted: boolean;
+  listed: boolean;
+  priceOG: string;
 };
 
-const STATUS: Record<Gaffer["status"], string> = {
-  LIVE: "bg-grass/12 text-grass border-grass/30",
-  UPCOMING: "bg-gold/12 text-gold border-gold/30",
-  ENDED: "bg-line/40 text-data border-line",
-};
+const MINT_MIN = 3;
 
 export function MyGaffers() {
   const { authenticated, user, login } = usePrivy();
   const [gaffers, setGaffers] = useState<Gaffer[] | null>(null);
+  const [names, setNames] = useState<Record<number, string>>({});
   const address = user?.wallet?.address;
 
   useEffect(() => {
@@ -37,31 +35,37 @@ export function MyGaffers() {
     setGaffers(null);
     fetch(`/api/my-gaffers?address=${address}`, { cache: "no-store" })
       .then((r) => r.json())
-      .then((d) => setGaffers(d.gaffers ?? []))
+      .then((d) => {
+        const gs: Gaffer[] = d.gaffers ?? [];
+        setGaffers(gs);
+        // resolve each gaffer's real name from its onchain brain
+        gs.forEach((g) =>
+          fetch(`/api/agent/${g.agentId}`, { cache: "no-store" })
+            .then((r) => (r.ok ? r.json() : null))
+            .then((info) => info?.name && setNames((n) => ({ ...n, [g.agentId]: info.name })))
+            .catch(() => {})
+        );
+      })
       .catch(() => setGaffers([]));
   }, [authenticated, address]);
 
-  // Signed out (or Privy still loading) → public live showcase + sign-in nudge.
-  // Never block on `ready` — the showcase must always render for visitors.
+  // Signed out → a clear personal-context prompt (NOT the public live view, which was confusing).
   if (!authenticated) {
     return (
-      <>
-        <div className="border-b border-line/60 bg-gradient-to-r from-grass/10 to-transparent">
-          <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-3 px-5 py-4 sm:flex-row sm:items-center">
-            <p className="text-sm text-chalk">
-              <Radio className="mr-1.5 inline h-4 w-4 text-grass" />
-              You&apos;re watching a live gaffer. <span className="text-data">Sign in to deploy and track your own stable.</span>
-            </p>
-            <Button onClick={() => login()} variant="primary" size="sm">Sign in</Button>
-          </div>
+      <div className="mx-auto max-w-md px-5 py-28 text-center">
+        <GafferMark className="mx-auto h-10 w-12 opacity-70" />
+        <h2 className="mt-4 text-2xl font-semibold text-chalk">Your gaffers live here</h2>
+        <p className="mt-2 text-sm text-data">Sign in to see the AI managers you own — their careers, NFTs and standings. Watching the arena needs no sign-in; this is your personal stable.</p>
+        <div className="mt-6 flex justify-center gap-3">
+          <Button onClick={() => login()} variant="primary" size="md">Sign in</Button>
+          <Button href="/onboard" variant="ghost" size="md">Deploy a gaffer</Button>
         </div>
-        <LiveDashboard />
-      </>
+      </div>
     );
   }
 
-  // Signed in → personal stable
-  const totalEffective = gaffers?.reduce((n, g) => n + g.effectiveScore, 0) ?? 0;
+  // Signed in → personal stable of agent assets
+  const totalEffective = gaffers?.reduce((n, g) => n + g.careerPoints, 0) ?? 0;
 
   return (
     <div className="mx-auto max-w-7xl px-5 py-10">
@@ -74,11 +78,11 @@ export function MyGaffers() {
             <h1 className="display text-4xl text-chalk">My Gaffers</h1>
             <p className="mt-1 text-sm text-data">
               {user?.email?.address ?? (address && shortAddr(address, 5))}
-              {gaffers && gaffers.length > 0 && <> · {gaffers.length} deployed · {totalEffective} total effective</>}
+              {gaffers && gaffers.length > 0 && <> · {gaffers.length} agent{gaffers.length > 1 ? "s" : ""} · {totalEffective} career points</>}
             </p>
           </div>
         </div>
-        <Button href="/onboard" variant="primary" size="md"><Plus className="h-4 w-4" /> Deploy new gaffer</Button>
+        <Button href="/onboard" variant="primary" size="md"><Plus className="h-4 w-4" /> Deploy your gaffer</Button>
       </div>
 
       {gaffers === null ? (
@@ -92,39 +96,34 @@ export function MyGaffers() {
             <h3 className="text-lg font-semibold text-chalk">No gaffers deployed yet</h3>
             <p className="mx-auto mt-2 max-w-sm text-sm text-data">Build your first AI manager, drop it into a contest, and watch it compete. Deploying is free.</p>
           </div>
-          <Button href="/onboard" variant="primary" size="md">Deploy your first gaffer</Button>
+          <Button href="/onboard" variant="primary" size="md">Deploy your gaffer</Button>
         </div>
       ) : (
-        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {gaffers.map((g) => (
-            <Link key={g.contestId} href={`/contest/${g.contestId}`} className="block">
-              <div className="card card-hover flex h-full flex-col p-6">
-                <div className="flex items-start justify-between">
-                  <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-bold uppercase ${STATUS[g.status]}`}>
-                    {g.status === "LIVE" && <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-grass" />}{g.status}
-                  </span>
-                  {g.rank > 0 && (
-                    <span className={`text-sm font-bold ${g.rank === 1 ? "text-gold" : "text-data"}`}>#{g.rank} <span className="text-data/60">/ {g.participants}</span></span>
+            <GafferCard
+              key={g.agentId}
+              agentId={g.agentId}
+              name={names[g.agentId] ?? `Agent #${g.agentId}`}
+              tier={g.tier}
+              rounds={g.roundsScored}
+              wins={g.wins}
+              careerPts={g.careerPoints}
+              href={`/gaffer/${g.agentId}`}
+              footer={
+                <div className="flex items-center justify-center text-xs">
+                  {g.listed ? (
+                    <span className="inline-flex items-center gap-1.5 text-gold"><Tag className="h-3.5 w-3.5" /> Listed · {Number(g.priceOG).toFixed(2)} OG</span>
+                  ) : g.minted ? (
+                    <span className="inline-flex items-center gap-1.5 text-grass"><ShieldCheck className="h-3.5 w-3.5" /> Tradeable NFT</span>
+                  ) : g.eligible ? (
+                    <span className="inline-flex items-center gap-1.5 text-grass"><Sparkles className="h-3.5 w-3.5" /> Ready to mint</span>
+                  ) : (
+                    <span className="text-data">{g.roundsScored}/{MINT_MIN} rounds to tradeable NFT</span>
                   )}
                 </div>
-
-                <h3 className="mt-4 line-clamp-2 text-base font-semibold leading-snug text-chalk">{g.contestName}</h3>
-
-                <div className="mt-5 grid grid-cols-3 gap-px overflow-hidden rounded-[var(--radius-data)] border border-line bg-line">
-                  <Cell label="Points" value={String(g.points)} />
-                  <Cell label="Mult" value={`${g.multiplier.toFixed(2)}x`} tone={g.overrideCount === 0 ? "grass" : "data"} />
-                  <Cell label="Score" value={String(g.effectiveScore)} tone="gold" />
-                </div>
-
-                <div className="mt-4 flex items-center justify-between text-xs">
-                  <span className={`inline-flex items-center gap-1.5 ${g.overrideCount === 0 ? "text-grass" : "text-danger"}`}>
-                    {g.overrideCount === 0 ? <ShieldCheck className="h-3.5 w-3.5" /> : <AlertTriangle className="h-3.5 w-3.5" />}
-                    {g.overrideCount === 0 ? "Autonomous" : `${g.overrideCount} override${g.overrideCount > 1 ? "s" : ""}`}
-                  </span>
-                  <span className="inline-flex items-center gap-1 font-medium text-grass">Standings <ArrowRight className="h-3.5 w-3.5" /></span>
-                </div>
-              </div>
-            </Link>
+              }
+            />
           ))}
         </div>
       )}
@@ -136,16 +135,6 @@ export function MyGaffers() {
           </a>
         </div>
       )}
-    </div>
-  );
-}
-
-function Cell({ label, value, tone }: { label: string; value: string; tone?: "grass" | "gold" | "data" }) {
-  const c = tone === "grass" ? "text-grass" : tone === "gold" ? "text-gold" : "text-chalk";
-  return (
-    <div className="bg-midfield px-2 py-2.5 text-center">
-      <div className={`display text-2xl ${c}`}>{value}</div>
-      <div className="text-[10px] uppercase tracking-wider text-data">{label}</div>
     </div>
   );
 }

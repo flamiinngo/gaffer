@@ -44,14 +44,17 @@ jobs:
           WC_TOURNAMENT_ID: "16"
           WC_SEASON_ID: "58210"
         run: |
-          node populate-contest.mjs
+          # The contest + house gaffers are seeded ONCE (populate-contest.mjs, run manually for setup).
+          # The recurring job just advances the SAME contest: every entrant re-picks from the current
+          # round's survivor pool (cross-round transfer) and is scored — career accumulates per agent.
+          node score-entrants.mjs
           node export-leaderboard.mjs
 
       - name: Commit refreshed snapshots
         run: |
           git config user.name "gaffer-bot"
           git config user.email "bot@gaffer.app"
-          git add frontend/public/leaderboard.json frontend/public/gaffer-latest.json frontend/public/featured.json
+          git add frontend/public/leaderboard.json frontend/public/gaffer-latest.json frontend/public/featured.json frontend/public/proofs.json
           git commit -m "auto: refresh showcase to the current matchday" || echo "no changes"
           git push || echo "nothing to push"
 

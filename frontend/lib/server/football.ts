@@ -104,8 +104,8 @@ type SofaEvent = {
   id: number;
   homeTeam: SofaTeam;
   awayTeam: SofaTeam;
-  homeScore?: { current?: number };
-  awayScore?: { current?: number };
+  homeScore?: { current?: number; penalties?: number };
+  awayScore?: { current?: number; penalties?: number };
   startTimestamp: number;
   status?: { type?: string; description?: string };
   roundInfo?: { name?: string; round?: number };
@@ -153,6 +153,44 @@ export async function getRecentResults(limit = 6): Promise<NormalizedFixture[] |
     .map(normalize)
     .sort((a, b) => +new Date(b.kickoff) - +new Date(a.kickoff))
     .slice(0, limit);
+}
+
+export type NationStatus = { status: "through" | "out" | "pending"; opponent?: string; kickoff?: string };
+
+/**
+ * Knockout survival map for the current round: each nation is "through" (won their tie),
+ * "out" (lost), or "pending" (not kicked off). Powers the squad-survival UI — the signature
+ * World-Cup mechanic (your squad is a portfolio of nations betting on who advances).
+ */
+export async function getRoundStatus(): Promise<{ round: string; nations: Record<string, NationStatus> } | null> {
+  if (!hasFootballKey()) return null;
+  const [last, next] = await Promise.all([
+    sofaGet<{ events: SofaEvent[] }>(`/api/v1/unique-tournament/${WC_TOURNAMENT}/season/${WC_SEASON}/events/last/0`),
+    sofaGet<{ events: SofaEvent[] }>(`/api/v1/unique-tournament/${WC_TOURNAMENT}/season/${WC_SEASON}/events/next/0`),
+  ]);
+  const all = [...(last?.events ?? []), ...(next?.events ?? [])];
+  if (!all.length) return null;
+  const rk = (e: SofaEvent) => String(e.roundInfo?.name ?? (e.roundInfo?.round ?? ""));
+  const finished = all.filter((e) => e.status?.type === "finished").sort((a, b) => b.startTimestamp - a.startTimestamp);
+  const round = finished[0] ? rk(finished[0]) : rk(all[0]);
+  const fixtures = all.filter((e) => rk(e) === round);
+  const nations: Record<string, NationStatus> = {};
+  for (const e of fixtures) {
+    const h = e.homeTeam?.name, a = e.awayTeam?.name;
+    if (!h || !a) continue;
+    if (e.status?.type === "finished") {
+      const hs = (e.homeScore?.current ?? 0), as = (e.awayScore?.current ?? 0);
+      const hp = e.homeScore?.penalties, ap = e.awayScore?.penalties;
+      const homeThrough = hs !== as ? hs > as : (hp ?? 0) >= (ap ?? 0); // ties decided on penalties
+      nations[h] = { status: homeThrough ? "through" : "out", opponent: a };
+      nations[a] = { status: homeThrough ? "out" : "through", opponent: h };
+    } else {
+      const kickoff = new Date(e.startTimestamp * 1000).toISOString();
+      nations[h] = { status: "pending", opponent: a, kickoff };
+      nations[a] = { status: "pending", opponent: h, kickoff };
+    }
+  }
+  return { round, nations };
 }
 
 export type PlayerStat = {

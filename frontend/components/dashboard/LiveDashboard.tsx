@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import { Pitch, slotsFromXI } from "@/components/pitch/Pitch";
 import { MultiplierMeter } from "@/components/dashboard/MultiplierMeter";
 import { Button } from "@/components/ui/Button";
-import { GafferMark } from "@/components/brand/Logo";
+import { GafferBot } from "@/components/brand/GafferBot";
 import { EXPLORER_URL, CONTRACT_ADDRESS, explorerAddress } from "@/lib/chain";
-import { Cpu, ShieldCheck, Database, Trophy, ExternalLink } from "lucide-react";
+import { Cpu, ShieldCheck, Database, Trophy, ExternalLink, Crown, ChevronRight } from "lucide-react";
 
-type XIPlayer = { name: string; pos: "GK" | "DEF" | "MID" | "FWD"; team: string; flag?: string; points: number; captain?: boolean };
+type XIPlayer = { name: string; pos: "GK" | "DEF" | "MID" | "FWD"; team: string; flag?: string; points: number; price?: number; pending?: boolean; captain?: boolean };
 type Snapshot = {
+  agentId?: number;
+  career?: { tier: number };
   managerName: string;
   match: string;
   score: string;
@@ -22,6 +24,9 @@ type Snapshot = {
   model: string;
   contestId: number;
   decisionRoot: string;
+  squadValue?: number | null;
+  budget?: number | null;
+  inTheBank?: number | null;
   onchain: { totalPoints: number; overrideCount: number; multiplier: number; effectiveScore: number };
 };
 
@@ -42,7 +47,7 @@ export function LiveDashboard() {
         <Trophy className="mx-auto h-10 w-10 text-line" />
         <h2 className="mt-4 text-xl font-semibold text-chalk">No gaffer deployed yet</h2>
         <p className="mt-2 text-sm text-data">Deploy one and watch it run a real World Cup matchday autonomously.</p>
-        <Button href="/onboard" variant="primary" size="md" className="mt-6">Deploy a gaffer</Button>
+        <Button href="/onboard" variant="primary" size="md" className="mt-6">Deploy your gaffer</Button>
       </div>
     );
   }
@@ -65,10 +70,13 @@ export function LiveDashboard() {
   const benchSlots = (data.bench ?? []).map((p) => ({
     name: p.name,
     team: p.flag ?? p.team ?? "⚽",
+    nation: p.team,
     pos: p.pos,
     x: 0,
     y: 0,
     points: p.points ?? 0,
+    price: p.price,
+    pending: p.pending,
   }));
 
   return (
@@ -77,23 +85,24 @@ export function LiveDashboard() {
       <div className="border-b border-line/60 bg-pitch-2">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
-            <span className="grid h-14 w-14 place-items-center rounded-[var(--radius-card)] border border-line bg-midfield">
-              <GafferMark className="h-8 w-9" />
+            <span className="grid h-16 w-16 place-items-center overflow-hidden rounded-[var(--radius-card)] border border-line bg-pitch-2">
+              <GafferBot agentId={data.agentId ?? 0} name={data.managerName} tier={data.career?.tier ?? 0} size={62} />
             </span>
             <div>
-              <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-grass">
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-grass" /> Live arena · current leader
+              </span>
+              <div className="mt-1 flex items-center gap-2">
+                <Crown className="h-5 w-5 text-gold" />
                 <h1 className="display text-4xl text-chalk">{data.managerName}</h1>
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-gold/30 bg-gold/10 px-2.5 py-0.5 text-[11px] font-semibold text-gold">
-                  FINAL
-                </span>
               </div>
               <p className="mt-1 text-sm text-data">
-                World Cup 2026 · {data.match} <span className="text-chalk">{data.score}</span> · contest #{data.contestId}
+                Leading {data.match} <span className="text-chalk">{data.score}</span> · contest #{data.contestId}
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2.5">
-            <Button href="/verify" variant="ghost" size="sm"><ShieldCheck className="h-4 w-4" /> Verify on 0G</Button>
+            <Button href={`/contest/${data.contestId}`} variant="ghost" size="sm">See all gaffers <ChevronRight className="h-4 w-4" /></Button>
             <Button href={explorerAddress(CONTRACT_ADDRESS)} variant="subtle" size="sm" target="_blank"><Database className="h-4 w-4" /> Onchain</Button>
           </div>
         </div>
@@ -102,7 +111,7 @@ export function LiveDashboard() {
       <div className="mx-auto max-w-7xl px-5 py-8">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,40fr)_minmax(0,60fr)]">
           {/* pitch */}
-          <Pitch xi={slots} formation={data.formation} bench={benchSlots} />
+          <Pitch xi={slots} formation={data.formation} bench={benchSlots} squadValue={data.squadValue} budget={data.budget} inTheBank={data.inTheBank} />
 
           {/* intel */}
           <div className="flex flex-col gap-6">

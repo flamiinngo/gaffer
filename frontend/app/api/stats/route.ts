@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import { readAllContests } from "@/lib/server/contract";
-import { FIXTURES } from "@/lib/competitions";
+import { getUpcomingFixtures } from "@/lib/server/football";
 
 export const revalidate = 10;
 
-/** Live platform stats — real onchain reads + fixture schedule. */
+/** Live platform stats — all real: onchain contest reads + the live World Cup fixture feed. */
 export async function GET() {
   try {
     const contests = await readAllContests();
@@ -13,8 +13,9 @@ export async function GET() {
       .reduce((sum, c) => sum + Number(c.prizePoolOG), 0)
       .toFixed(3);
     const openContests = contests.filter((c) => c.status !== "ENDED").length;
-    const matchesRemaining =
-      FIXTURES.filter((f) => new Date(f.kickoff).getTime() > Date.now()).length + 9;
+    // Real matches left = upcoming, not-yet-kicked-off World Cup fixtures from the live feed.
+    const upcoming = (await getUpcomingFixtures(100)) ?? [];
+    const matchesRemaining = upcoming.filter((f) => f.status !== "finished").length;
 
     return NextResponse.json({
       activeManagers,

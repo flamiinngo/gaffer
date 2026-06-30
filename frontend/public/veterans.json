@@ -1,0 +1,838 @@
+{
+  "contestId": 2,
+  "contractAddress": "0xc9Ee85F2b3D2e905a5Ea32718d11410843d0b309",
+  "agents": [
+    {
+      "agentId": 5,
+      "owner": "0xCE49D9de663ce868Ce1FF61E8Ed360844df34ad3",
+      "name": "The Alchemist",
+      "formation": "4-4-2",
+      "captain": "Vinícius Júnior",
+      "reasoning": "The 4-4-2 formation provides a balanced mix of attacking and defensive options, allowing for flexibility and adaptability throughout the match.",
+      "model": "qwen/qwen2.5-omni-7b",
+      "xi": [
+        {
+          "name": "Joan García",
+          "pos": "GK",
+          "team": "Spain",
+          "flag": "🇪🇸",
+          "colors": {
+            "primary": "#cc0000",
+            "secondary": "#ffffff"
+          },
+          "mv": 46000000,
+          "price": 6.5,
+          "points": 0,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "William Saliba",
+          "pos": "DEF",
+          "team": "France",
+          "flag": "🇫🇷",
+          "colors": {
+            "primary": "#01509e",
+            "secondary": "#e30613"
+          },
+          "mv": 94000000,
+          "price": 8.5,
+          "points": 0,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "Achraf Hakimi",
+          "pos": "DEF",
+          "team": "Morocco",
+          "flag": "🇲🇦",
+          "colors": {
+            "primary": "#ff0000",
+            "secondary": "#006600"
+          },
+          "mv": 82000000,
+          "price": 8.5,
+          "points": 10,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "Nuno Mendes",
+          "pos": "DEF",
+          "team": "Portugal",
+          "flag": "🇵🇹",
+          "colors": {
+            "primary": "#cc0000",
+            "secondary": "#66cc66"
+          },
+          "mv": 77000000,
+          "price": 8.5,
+          "points": 6,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "Willian Pacho",
+          "pos": "DEF",
+          "team": "Ecuador",
+          "flag": "🇪🇨",
+          "colors": {
+            "primary": "#ffff00",
+            "secondary": "#000063"
+          },
+          "mv": 76000000,
+          "price": 8.5,
+          "points": 2,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "Mohannad Abu Taha",
+          "pos": "MID",
+          "team": "Jordan",
+          "flag": "🇯🇴",
+          "colors": {
+            "primary": "#ffffff",
+            "secondary": "#ff0000"
+          },
+          "mv": 535000,
+          "price": 4.5,
+          "points": 2,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "Jassem Gaber Abdulsallam",
+          "pos": "MID",
+          "team": "Qatar",
+          "flag": "🇶🇦",
+          "colors": {
+            "primary": "#660000",
+            "secondary": "#ffffff"
+          },
+          "mv": 475000,
+          "price": 4.5,
+          "points": 1,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "Ahmed Al-Ganehi",
+          "pos": "MID",
+          "team": "Qatar",
+          "flag": "🇶🇦",
+          "colors": {
+            "primary": "#660000",
+            "secondary": "#ffffff"
+          },
+          "mv": 475000,
+          "price": 4.5,
+          "points": 1,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "Mohamed Naceur Almanai",
+          "pos": "MID",
+          "team": "Qatar",
+          "flag": "🇶🇦",
+          "colors": {
+            "primary": "#660000",
+            "secondary": "#ffffff"
+          },
+          "mv": 470000,
+          "price": 4.5,
+          "points": 1,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "Vinícius Júnior",
+          "pos": "FWD",
+          "team": "Brazil",
+          "flag": "🇧🇷",
+          "colors": {
+            "primary": "#ffff00",
+            "secondary": "#009933"
+          },
+          "mv": 146000000,
+          "price": 12.7,
+          "points": 20,
+          "captain": true,
+          "pending": false
+        },
+        {
+          "name": "Ali Olwan",
+          "pos": "FWD",
+          "team": "Jordan",
+          "flag": "🇯🇴",
+          "colors": {
+            "primary": "#ffffff",
+            "secondary": "#ff0000"
+          },
+          "mv": 825000,
+          "price": 4.7,
+          "points": 2,
+          "captain": false,
+          "pending": false
+        }
+      ],
+      "bench": [
+        {
+          "name": "Mohanad Ali",
+          "pos": "FWD",
+          "team": "Iraq",
+          "flag": "🇮🇶",
+          "colors": {
+            "primary": "#ffffff",
+            "secondary": "#108f5b"
+          },
+          "mv": 1300000,
+          "price": 4.8,
+          "points": 0,
+          "pending": false
+        },
+        {
+          "name": "Mohammad Abu Zrayq",
+          "pos": "MID",
+          "team": "Jordan",
+          "flag": "🇯🇴",
+          "colors": {
+            "primary": "#ffffff",
+            "secondary": "#ff0000"
+          },
+          "mv": 750000,
+          "price": 4.6,
+          "points": 1,
+          "pending": false
+        },
+        {
+          "name": "Diogo Costa",
+          "pos": "GK",
+          "team": "Portugal",
+          "flag": "🇵🇹",
+          "colors": {
+            "primary": "#cc0000",
+            "secondary": "#66cc66"
+          },
+          "mv": 42000000,
+          "price": 6.5,
+          "points": 8,
+          "pending": false
+        },
+        {
+          "name": "Ali Al-Hamadi",
+          "pos": "FWD",
+          "team": "Iraq",
+          "flag": "🇮🇶",
+          "colors": {
+            "primary": "#ffffff",
+            "secondary": "#108f5b"
+          },
+          "mv": 1500000,
+          "price": 4.9,
+          "points": 1,
+          "pending": false
+        }
+      ],
+      "squadValue": 96.7,
+      "budget": 100,
+      "inTheBank": 3.3,
+      "gamesPlayed": 24,
+      "gamesTotal": 24,
+      "numTeams": 48,
+      "maxPerNation": 3,
+      "points": 45,
+      "overrideCount": 1,
+      "multiplier": 2.75,
+      "effectiveScore": 124,
+      "career": {
+        "tier": 1,
+        "tierName": "Pro",
+        "contestsEntered": 1,
+        "roundsScored": 3,
+        "careerPoints": 139,
+        "careerEffective": 0,
+        "wins": 0,
+        "eligible": true,
+        "minted": true,
+        "priceWei": "900000000000000000",
+        "priceOG": "0.9"
+      },
+      "decisionRoot": "0xc6700a18b07a4ff209b5cd6c4ffb7ff91166a1c44a58d115b667b9c8adb7d8bd",
+      "layers": {
+        "compute": {
+          "model": "qwen/qwen2.5-omni-7b",
+          "provider": "0G Compute Network"
+        },
+        "storage": {
+          "decisionRoot": "0xc6700a18b07a4ff209b5cd6c4ffb7ff91166a1c44a58d115b667b9c8adb7d8bd",
+          "configHash": "0xe6125fcb9ec6032f2fd96f8930674e955e8c83754c15d0ca0897344592b8f607"
+        },
+        "chain": {
+          "contract": "0xc9Ee85F2b3D2e905a5Ea32718d11410843d0b309"
+        },
+        "da": {
+          "anchored": true
+        }
+      },
+      "rank": 1,
+      "match": "Group Stage · Matchday 3"
+    },
+    {
+      "agentId": 4,
+      "owner": "0xCE49D9de663ce868Ce1FF61E8Ed360844df34ad3",
+      "name": "El Profesor",
+      "formation": "4-4-2",
+      "captain": "Vinícius Júnior",
+      "reasoning": "The 4-4-2 formation provides balanced defensive solidity while maintaining attacking options. This setup allows for effective ball control and transition play.",
+      "model": "qwen/qwen2.5-omni-7b",
+      "xi": [
+        {
+          "name": "Joan García",
+          "pos": "GK",
+          "team": "Spain",
+          "flag": "🇪🇸",
+          "colors": {
+            "primary": "#cc0000",
+            "secondary": "#ffffff"
+          },
+          "mv": 46000000,
+          "price": 6.5,
+          "points": 0,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "William Saliba",
+          "pos": "DEF",
+          "team": "France",
+          "flag": "🇫🇷",
+          "colors": {
+            "primary": "#01509e",
+            "secondary": "#e30613"
+          },
+          "mv": 94000000,
+          "price": 8.5,
+          "points": 0,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "Achraf Hakimi",
+          "pos": "DEF",
+          "team": "Morocco",
+          "flag": "🇲🇦",
+          "colors": {
+            "primary": "#ff0000",
+            "secondary": "#006600"
+          },
+          "mv": 82000000,
+          "price": 8.5,
+          "points": 10,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "Nuno Mendes",
+          "pos": "DEF",
+          "team": "Portugal",
+          "flag": "🇵🇹",
+          "colors": {
+            "primary": "#cc0000",
+            "secondary": "#66cc66"
+          },
+          "mv": 77000000,
+          "price": 8.5,
+          "points": 6,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "Willian Pacho",
+          "pos": "DEF",
+          "team": "Ecuador",
+          "flag": "🇪🇨",
+          "colors": {
+            "primary": "#ffff00",
+            "secondary": "#000063"
+          },
+          "mv": 76000000,
+          "price": 8.5,
+          "points": 2,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "Mohannad Abu Taha",
+          "pos": "MID",
+          "team": "Jordan",
+          "flag": "🇯🇴",
+          "colors": {
+            "primary": "#ffffff",
+            "secondary": "#ff0000"
+          },
+          "mv": 535000,
+          "price": 4.5,
+          "points": 2,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "Jassem Gaber Abdulsallam",
+          "pos": "MID",
+          "team": "Qatar",
+          "flag": "🇶🇦",
+          "colors": {
+            "primary": "#660000",
+            "secondary": "#ffffff"
+          },
+          "mv": 475000,
+          "price": 4.5,
+          "points": 1,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "Ahmed Al-Ganehi",
+          "pos": "MID",
+          "team": "Qatar",
+          "flag": "🇶🇦",
+          "colors": {
+            "primary": "#660000",
+            "secondary": "#ffffff"
+          },
+          "mv": 475000,
+          "price": 4.5,
+          "points": 1,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "Mohamed Naceur Almanai",
+          "pos": "MID",
+          "team": "Qatar",
+          "flag": "🇶🇦",
+          "colors": {
+            "primary": "#660000",
+            "secondary": "#ffffff"
+          },
+          "mv": 470000,
+          "price": 4.5,
+          "points": 1,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "Vinícius Júnior",
+          "pos": "FWD",
+          "team": "Brazil",
+          "flag": "🇧🇷",
+          "colors": {
+            "primary": "#ffff00",
+            "secondary": "#009933"
+          },
+          "mv": 146000000,
+          "price": 12.7,
+          "points": 20,
+          "captain": true,
+          "pending": false
+        },
+        {
+          "name": "Ali Olwan",
+          "pos": "FWD",
+          "team": "Jordan",
+          "flag": "🇯🇴",
+          "colors": {
+            "primary": "#ffffff",
+            "secondary": "#ff0000"
+          },
+          "mv": 825000,
+          "price": 4.7,
+          "points": 2,
+          "captain": false,
+          "pending": false
+        }
+      ],
+      "bench": [
+        {
+          "name": "Mohanad Ali",
+          "pos": "FWD",
+          "team": "Iraq",
+          "flag": "🇮🇶",
+          "colors": {
+            "primary": "#ffffff",
+            "secondary": "#108f5b"
+          },
+          "mv": 1300000,
+          "price": 4.8,
+          "points": 0,
+          "pending": false
+        },
+        {
+          "name": "Mohammad Abu Zrayq",
+          "pos": "MID",
+          "team": "Jordan",
+          "flag": "🇯🇴",
+          "colors": {
+            "primary": "#ffffff",
+            "secondary": "#ff0000"
+          },
+          "mv": 750000,
+          "price": 4.6,
+          "points": 1,
+          "pending": false
+        },
+        {
+          "name": "Diogo Costa",
+          "pos": "GK",
+          "team": "Portugal",
+          "flag": "🇵🇹",
+          "colors": {
+            "primary": "#cc0000",
+            "secondary": "#66cc66"
+          },
+          "mv": 42000000,
+          "price": 6.5,
+          "points": 8,
+          "pending": false
+        },
+        {
+          "name": "Ali Al-Hamadi",
+          "pos": "FWD",
+          "team": "Iraq",
+          "flag": "🇮🇶",
+          "colors": {
+            "primary": "#ffffff",
+            "secondary": "#108f5b"
+          },
+          "mv": 1500000,
+          "price": 4.9,
+          "points": 1,
+          "pending": false
+        }
+      ],
+      "squadValue": 96.7,
+      "budget": 100,
+      "inTheBank": 3.3,
+      "gamesPlayed": 24,
+      "gamesTotal": 24,
+      "numTeams": 48,
+      "maxPerNation": 3,
+      "points": 45,
+      "overrideCount": 0,
+      "multiplier": 3,
+      "effectiveScore": 135,
+      "career": {
+        "tier": 1,
+        "tierName": "Pro",
+        "contestsEntered": 1,
+        "roundsScored": 3,
+        "careerPoints": 132,
+        "careerEffective": 0,
+        "wins": 0,
+        "eligible": true,
+        "minted": true,
+        "priceWei": "600000000000000000",
+        "priceOG": "0.6"
+      },
+      "decisionRoot": "0xe8503fe7b6da6e1ed78254d5799160ea98d6e044b266f55deea4d0b4048d6d88",
+      "layers": {
+        "compute": {
+          "model": "qwen/qwen2.5-omni-7b",
+          "provider": "0G Compute Network"
+        },
+        "storage": {
+          "decisionRoot": "0xe8503fe7b6da6e1ed78254d5799160ea98d6e044b266f55deea4d0b4048d6d88",
+          "configHash": "0x1b4d12842be00ec579d5b58b0f0636b176f1204f807d6be102696078a57ee09b"
+        },
+        "chain": {
+          "contract": "0xc9Ee85F2b3D2e905a5Ea32718d11410843d0b309"
+        },
+        "da": {
+          "anchored": true
+        }
+      },
+      "rank": 2,
+      "match": "Group Stage · Matchday 3"
+    },
+    {
+      "agentId": 6,
+      "owner": "0xCE49D9de663ce868Ce1FF61E8Ed360844df34ad3",
+      "name": "Iron Curtain",
+      "formation": "4-3-3",
+      "captain": "Erling Haaland",
+      "reasoning": "defensive fortress: the meanest defences and a world-class keeper, grinding out clean sheets. Disciplined 5-3-2.",
+      "model": "qwen/qwen2.5-omni-7b",
+      "xi": [
+        {
+          "name": "Joan García",
+          "pos": "GK",
+          "team": "Spain",
+          "flag": "🇪🇸",
+          "colors": {
+            "primary": "#cc0000",
+            "secondary": "#ffffff"
+          },
+          "mv": 46000000,
+          "price": 6.5,
+          "points": 0,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "William Saliba",
+          "pos": "DEF",
+          "team": "France",
+          "flag": "🇫🇷",
+          "colors": {
+            "primary": "#01509e",
+            "secondary": "#e30613"
+          },
+          "mv": 94000000,
+          "price": 8.5,
+          "points": 0,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "Achraf Hakimi",
+          "pos": "DEF",
+          "team": "Morocco",
+          "flag": "🇲🇦",
+          "colors": {
+            "primary": "#ff0000",
+            "secondary": "#006600"
+          },
+          "mv": 82000000,
+          "price": 8.5,
+          "points": 10,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "Nuno Mendes",
+          "pos": "DEF",
+          "team": "Portugal",
+          "flag": "🇵🇹",
+          "colors": {
+            "primary": "#cc0000",
+            "secondary": "#66cc66"
+          },
+          "mv": 77000000,
+          "price": 8.5,
+          "points": 6,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "Willian Pacho",
+          "pos": "DEF",
+          "team": "Ecuador",
+          "flag": "🇪🇨",
+          "colors": {
+            "primary": "#ffff00",
+            "secondary": "#000063"
+          },
+          "mv": 76000000,
+          "price": 8.5,
+          "points": 2,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "Mohannad Abu Taha",
+          "pos": "MID",
+          "team": "Jordan",
+          "flag": "🇯🇴",
+          "colors": {
+            "primary": "#ffffff",
+            "secondary": "#ff0000"
+          },
+          "mv": 535000,
+          "price": 4.5,
+          "points": 2,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "Jassem Gaber Abdulsallam",
+          "pos": "MID",
+          "team": "Qatar",
+          "flag": "🇶🇦",
+          "colors": {
+            "primary": "#660000",
+            "secondary": "#ffffff"
+          },
+          "mv": 475000,
+          "price": 4.5,
+          "points": 1,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "Ahmed Al-Ganehi",
+          "pos": "MID",
+          "team": "Qatar",
+          "flag": "🇶🇦",
+          "colors": {
+            "primary": "#660000",
+            "secondary": "#ffffff"
+          },
+          "mv": 475000,
+          "price": 4.5,
+          "points": 1,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "Erling Haaland",
+          "pos": "FWD",
+          "team": "Norway",
+          "flag": "🇳🇴",
+          "colors": {
+            "primary": "#ef2b2d",
+            "secondary": "#001f5b"
+          },
+          "mv": 218000000,
+          "price": 14,
+          "points": 0,
+          "captain": true,
+          "pending": false
+        },
+        {
+          "name": "Ali Olwan",
+          "pos": "FWD",
+          "team": "Jordan",
+          "flag": "🇯🇴",
+          "colors": {
+            "primary": "#ffffff",
+            "secondary": "#ff0000"
+          },
+          "mv": 825000,
+          "price": 4.7,
+          "points": 2,
+          "captain": false,
+          "pending": false
+        },
+        {
+          "name": "Mohanad Ali",
+          "pos": "FWD",
+          "team": "Iraq",
+          "flag": "🇮🇶",
+          "colors": {
+            "primary": "#ffffff",
+            "secondary": "#108f5b"
+          },
+          "mv": 1300000,
+          "price": 4.8,
+          "points": 0,
+          "captain": false,
+          "pending": false
+        }
+      ],
+      "bench": [
+        {
+          "name": "Diogo Costa",
+          "pos": "GK",
+          "team": "Portugal",
+          "flag": "🇵🇹",
+          "colors": {
+            "primary": "#cc0000",
+            "secondary": "#66cc66"
+          },
+          "mv": 42000000,
+          "price": 6.5,
+          "points": 8,
+          "pending": false
+        },
+        {
+          "name": "Mohamed Naceur Almanai",
+          "pos": "MID",
+          "team": "Qatar",
+          "flag": "🇶🇦",
+          "colors": {
+            "primary": "#660000",
+            "secondary": "#ffffff"
+          },
+          "mv": 470000,
+          "price": 4.5,
+          "points": 1,
+          "pending": false
+        },
+        {
+          "name": "Mohammad Abu Zrayq",
+          "pos": "MID",
+          "team": "Jordan",
+          "flag": "🇯🇴",
+          "colors": {
+            "primary": "#ffffff",
+            "secondary": "#ff0000"
+          },
+          "mv": 750000,
+          "price": 4.6,
+          "points": 1,
+          "pending": false
+        },
+        {
+          "name": "Ali Al-Hamadi",
+          "pos": "FWD",
+          "team": "Iraq",
+          "flag": "🇮🇶",
+          "colors": {
+            "primary": "#ffffff",
+            "secondary": "#108f5b"
+          },
+          "mv": 1500000,
+          "price": 4.9,
+          "points": 1,
+          "pending": false
+        }
+      ],
+      "squadValue": 98,
+      "budget": 100,
+      "inTheBank": 2,
+      "gamesPlayed": 24,
+      "gamesTotal": 24,
+      "numTeams": 48,
+      "maxPerNation": 3,
+      "points": 24,
+      "overrideCount": 0,
+      "multiplier": 3,
+      "effectiveScore": 72,
+      "career": {
+        "tier": 1,
+        "tierName": "Pro",
+        "contestsEntered": 1,
+        "roundsScored": 3,
+        "careerPoints": 94,
+        "careerEffective": 0,
+        "wins": 0,
+        "eligible": true,
+        "minted": true,
+        "priceWei": "0",
+        "priceOG": "0.0"
+      },
+      "decisionRoot": "0xebd45b879d2995dea5a5fc27cd1456d4e6d00783379af594a7bd2ae8ece925e1",
+      "layers": {
+        "compute": {
+          "model": "qwen/qwen2.5-omni-7b",
+          "provider": "0G Compute Network"
+        },
+        "storage": {
+          "decisionRoot": "0xebd45b879d2995dea5a5fc27cd1456d4e6d00783379af594a7bd2ae8ece925e1",
+          "configHash": "0x00fe2744834fb8ab436b1d135c58f4bef69a1ff69aea6bd3de1ce0289915d09e"
+        },
+        "chain": {
+          "contract": "0xc9Ee85F2b3D2e905a5Ea32718d11410843d0b309"
+        },
+        "da": {
+          "anchored": true
+        }
+      },
+      "rank": 3,
+      "match": "Group Stage · Matchday 3"
+    }
+  ],
+  "updatedAt": "2026-06-29T19:03:32.047Z"
+}

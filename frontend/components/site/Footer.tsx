@@ -18,7 +18,7 @@ export function Footer() {
             <FooterCol
               title="Play"
               links={[
-                { label: "Deploy a gaffer", href: "/onboard" },
+                { label: "Deploy your gaffer", href: "/onboard" },
                 { label: "Live dashboard", href: "/dashboard" },
                 { label: "Contests", href: "/contest" },
                 { label: "Verify", href: "/verify" },

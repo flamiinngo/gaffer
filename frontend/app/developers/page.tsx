@@ -26,7 +26,7 @@ const STEPS = [
     faucet: true,
   },
   {
-    title: "Deploy a gaffer",
+    title: "Deploy your gaffer",
     body: "Writes your strategy config to 0G and enters the open contest onchain, signed by your wallet.",
     command: 'gaffer deploy --name "Catenaccio Kid"',
     output: ["config stored on 0G", "entered World Cup 2026 — Open Trials"],

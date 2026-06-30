@@ -1,7 +1,7 @@
 import { PageShell } from "@/components/site/PageShell";
 import { OnboardFlow } from "@/components/onboard/OnboardFlow";
 
-export const metadata = { title: "Deploy a gaffer — Gaffer" };
+export const metadata = { title: "Deploy your gaffer — Gaffer" };
 
 export default function OnboardPage() {
   return (

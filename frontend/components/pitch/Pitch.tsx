@@ -2,41 +2,24 @@
 
 import { useEffect, useState } from "react";
 import { clsx } from "clsx";
+import { kitFor, type Kit } from "@/lib/teamColors";
 
 export type PlayerSlot = {
   name: string;
   team: string; // flag/emoji or short
+  nation?: string; // full nation name, for kit colours
+  colors?: Kit | null; // live API team colours (override the canonical map)
   pos: "GK" | "DEF" | "MID" | "FWD";
   x: number; // 0..100 across pitch width
   y: number; // 0..100 down pitch length (0 = opponent goal / top)
   points: number;
+  price?: number; // FPL £m price (market-value based)
+  pending?: boolean; // nation's game hasn't kicked off yet this round
   captain?: boolean;
   live?: boolean; // currently in a live match
 };
 
-/** A 4-3-3, attacking upward. Coordinates are % within the pitch. */
-export const DEFAULT_XI: PlayerSlot[] = [
-  { name: "Martínez", team: "🇦🇷", pos: "GK", x: 50, y: 90, points: 6 },
-  { name: "Hakimi", team: "🇲🇦", pos: "DEF", x: 16, y: 70, points: 8, live: true },
-  { name: "Saliba", team: "🇫🇷", pos: "DEF", x: 38, y: 74, points: 4 },
-  { name: "Van Dijk", team: "🇳🇱", pos: "DEF", x: 62, y: 74, points: 7 },
-  { name: "Davies", team: "🇨🇦", pos: "DEF", x: 84, y: 70, points: 3 },
-  { name: "Rodri", team: "🇪🇸", pos: "MID", x: 30, y: 50, points: 9, live: true },
-  { name: "Bellingham", team: "🏴", pos: "MID", x: 50, y: 46, points: 14, captain: true, live: true },
-  { name: "Pedri", team: "🇪🇸", pos: "MID", x: 70, y: 50, points: 6 },
-  { name: "Vinícius", team: "🇧🇷", pos: "FWD", x: 22, y: 24, points: 11, live: true },
-  { name: "Mbappé", team: "🇫🇷", pos: "FWD", x: 50, y: 18, points: 12, live: true },
-  { name: "Saka", team: "🏴", pos: "FWD", x: 78, y: 24, points: 5 },
-];
-
-export const BENCH: PlayerSlot[] = [
-  { name: "Donnarumma", team: "🇮🇹", pos: "GK", x: 0, y: 0, points: 2 },
-  { name: "Hernández", team: "🇫🇷", pos: "DEF", x: 0, y: 0, points: 1 },
-  { name: "Wirtz", team: "🇩🇪", pos: "MID", x: 0, y: 0, points: 4 },
-  { name: "Haaland", team: "🇳🇴", pos: "FWD", x: 0, y: 0, points: 0 },
-];
-
-type XIPlayer = { name: string; pos: PlayerSlot["pos"]; team?: string; flag?: string; points?: number; captain?: boolean };
+type XIPlayer = { name: string; pos: PlayerSlot["pos"]; team?: string; flag?: string; colors?: Kit | null; points?: number; price?: number; pending?: boolean; captain?: boolean };
 
 /** Y-band per line (attacking upward). */
 const Y: Record<PlayerSlot["pos"], number> = { GK: 90, DEF: 73, MID: 50, FWD: 22 };
@@ -56,10 +39,14 @@ export function slotsFromXI(xi: XIPlayer[]): PlayerSlot[] {
       slots.push({
         name: p.name,
         team: p.flag ?? p.team ?? "⚽",
+        nation: p.team,
+        colors: p.colors ?? null,
         pos,
         x: Math.max(8, Math.min(92, x)),
         y: Y[pos],
         points: p.points ?? 0,
+        price: p.price,
+        pending: !!p.pending,
         captain: !!p.captain,
         live: false,
       });
@@ -68,46 +55,71 @@ export function slotsFromXI(xi: XIPlayer[]): PlayerSlot[] {
   return slots;
 }
 
+/** An FPL-style football kit, coloured by nation. */
+function Jersey({ kit, live }: { kit: Kit; live?: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 60 54"
+      className={clsx("h-11 w-11 drop-shadow-md transition-transform group-hover/chip:scale-110 sm:h-12 sm:w-12", live && "[animation:var(--animate-pulse-grass)]")}
+      aria-hidden
+    >
+      {/* sleeves */}
+      <path d="M14,8 L3,17 L9,28 L19,21 Z" fill={kit.secondary} stroke="rgba(0,0,0,.28)" strokeWidth="1" />
+      <path d="M46,8 L57,17 L51,28 L41,21 Z" fill={kit.secondary} stroke="rgba(0,0,0,.28)" strokeWidth="1" />
+      {/* body */}
+      <path d="M19,8 L24,8 Q30,15 36,8 L41,8 L41,49 L19,49 Z" fill={kit.primary} stroke="rgba(0,0,0,.32)" strokeWidth="1.2" />
+      {/* collar */}
+      <path d="M24,8 Q30,15 36,8 L33,5 Q30,9 27,5 Z" fill={kit.secondary} />
+    </svg>
+  );
+}
+
 function PlayerChip({ p }: { p: PlayerSlot }) {
+  const kit = kitFor(p.nation, p.colors);
   return (
     <div
-      className="absolute -translate-x-1/2 -translate-y-1/2"
+      className="group/chip absolute -translate-x-1/2 -translate-y-1/2"
       style={{ left: `${p.x}%`, top: `${p.y}%` }}
     >
       <div className="flex flex-col items-center gap-1">
         <div className="relative">
-          <div
-            className={clsx(
-              "grid h-10 w-10 place-items-center rounded-full border text-base shadow-lg transition-transform hover:scale-110 sm:h-11 sm:w-11",
-              p.live
-                ? "border-grass/70 bg-pitch/90 [animation:var(--animate-pulse-grass)]"
-                : "border-line bg-pitch/90"
-            )}
-          >
-            <span aria-hidden>{p.team}</span>
-          </div>
+          <Jersey kit={kit} live={p.live} />
+          {/* nation flag badge */}
+          <span className="absolute -bottom-0.5 -right-1 grid h-4 w-4 place-items-center rounded-full bg-pitch/90 text-[10px] leading-none shadow ring-1 ring-black/20">
+            {p.team}
+          </span>
           {p.captain && (
-            <span className="absolute -right-1 -top-1 grid h-4 w-4 place-items-center rounded-full bg-gold text-[9px] font-black text-pitch">
+            <span className="absolute -left-1 -top-1 grid h-4 w-4 place-items-center rounded-full bg-gold text-[9px] font-black text-pitch shadow">
               C
             </span>
           )}
         </div>
         <div className="flex flex-col items-center">
-          <span className="max-w-[72px] truncate rounded-[3px] bg-pitch/85 px-1.5 text-[11px] font-semibold leading-tight text-chalk">
+          <span className="max-w-[76px] truncate rounded-[3px] bg-pitch/85 px-1.5 text-[11px] font-semibold leading-tight text-chalk">
             {p.name}
           </span>
-          <span
-            className={clsx(
-              "mt-0.5 rounded-[3px] px-1.5 text-[11px] font-bold tabular-nums leading-tight",
-              p.points >= 10
-                ? "bg-grass text-pitch"
-                : p.points > 0
-                  ? "bg-grass/15 text-grass"
-                  : "bg-line/60 text-data"
+          <div className="mt-0.5 flex items-center gap-1">
+            <span
+              title={p.pending ? "Kick-off pending" : undefined}
+              className={clsx(
+                "rounded-[3px] px-1.5 text-[11px] font-bold tabular-nums leading-tight",
+                p.pending
+                  ? "bg-gold/15 text-gold"
+                  : p.points >= 10
+                    ? "bg-grass text-pitch"
+                    : p.points > 0
+                      ? "bg-grass/15 text-grass"
+                      : "bg-line/60 text-data"
+              )}
+            >
+              {p.pending ? "•" : p.points}
+            </span>
+            {p.price != null && (
+              <span className="rounded-[3px] bg-pitch/85 px-1 text-[10px] font-semibold tabular-nums leading-tight text-data">
+                £{p.price.toFixed(1)}
+              </span>
             )}
-          >
-            {p.points}
-          </span>
+          </div>
         </div>
       </div>
     </div>
@@ -115,13 +127,19 @@ function PlayerChip({ p }: { p: PlayerSlot }) {
 }
 
 export function Pitch({
-  xi = DEFAULT_XI,
+  xi = [],
   formation = "4-3-3",
   bench = [],
+  squadValue,
+  inTheBank,
+  budget,
 }: {
   xi?: PlayerSlot[];
   formation?: string;
   bench?: PlayerSlot[];
+  squadValue?: number | null;
+  inTheBank?: number | null;
+  budget?: number | null;
 }) {
   // gentle "live" recalculation tick to feel alive
   const [, setTick] = useState(0);
@@ -136,9 +154,22 @@ export function Pitch({
         <span className="text-xs font-semibold uppercase tracking-wider text-data">
           Current XI
         </span>
-        <span className="rounded-[3px] bg-grass/10 px-2 py-0.5 text-xs font-bold text-grass">
-          {formation}
-        </span>
+        <div className="flex items-center gap-2">
+          {squadValue != null && (
+            <span className="rounded-[3px] bg-gold/15 px-2 py-0.5 text-xs font-bold tabular-nums text-gold">
+              £{squadValue.toFixed(1)}m
+              {budget != null && <span className="font-medium text-data">/£{budget.toFixed(0)}m</span>}
+            </span>
+          )}
+          {inTheBank != null && (
+            <span className="rounded-[3px] bg-grass/10 px-2 py-0.5 text-xs font-bold tabular-nums text-grass">
+              £{inTheBank.toFixed(1)}m ITB
+            </span>
+          )}
+          <span className="rounded-[3px] bg-grass/10 px-2 py-0.5 text-xs font-bold text-grass">
+            {formation}
+          </span>
+        </div>
       </div>
 
       <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[var(--radius-data)]">
@@ -175,18 +206,22 @@ export function Pitch({
       <div className="mt-3 px-1">
         <span className="text-[11px] font-semibold uppercase tracking-wider text-data">Bench</span>
         <div className="mt-2 grid grid-cols-4 gap-2">
-          {bench.map((p) => (
-            <div
-              key={p.name}
-              className="flex items-center gap-2 rounded-[var(--radius-data)] border border-line bg-midfield-2 px-2 py-1.5"
-            >
-              <span aria-hidden className="text-sm">{p.team}</span>
-              <div className="min-w-0">
-                <div className="truncate text-[11px] font-medium text-chalk">{p.name}</div>
-                <div className="text-[10px] text-data">{p.points} pts</div>
+          {bench.map((p) => {
+            const kit = kitFor(p.nation, p.colors);
+            return (
+              <div
+                key={p.name}
+                className="flex items-center gap-2 rounded-[var(--radius-data)] border border-line border-l-[3px] bg-midfield-2 px-2 py-1.5"
+                style={{ borderLeftColor: kit.primary }}
+              >
+                <span aria-hidden className="text-sm">{p.team}</span>
+                <div className="min-w-0">
+                  <div className="truncate text-[11px] font-medium text-chalk">{p.name}</div>
+                  <div className="text-[10px] text-data">{p.pending ? "kick-off pending" : `${p.points} pts`}</div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
       )}

@@ -1,0 +1,8 @@
+{
+  "network": "galileo",
+  "chainId": 16602,
+  "address": "0xc9Ee85F2b3D2e905a5Ea32718d11410843d0b309",
+  "deployer": "0xCE49D9de663ce868Ce1FF61E8Ed360844df34ad3",
+  "contract": "GafferArena",
+  "deployedAt": "2026-06-29T17:31:42.707Z"
+}

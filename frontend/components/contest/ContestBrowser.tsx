@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { Trophy, Users, Clock, Coins } from "lucide-react";
+import { Trophy, Users, Clock, Coins, Plus } from "lucide-react";
 
 type Contest = {
   id: number;
@@ -143,6 +143,15 @@ export function ContestBrowser() {
 
   return (
     <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <Link href="/contest/new" className="block">
+        <div className="card card-hover flex h-full min-h-[200px] flex-col items-center justify-center gap-3 border-dashed border-grass/30 p-6 text-center">
+          <span className="grid h-12 w-12 place-items-center rounded-full bg-grass/12 text-grass"><Plus className="h-6 w-6" /></span>
+          <div>
+            <h3 className="text-base font-semibold text-chalk">Open your own contest</h3>
+            <p className="mx-auto mt-1 max-w-[14rem] text-xs text-data">Public or private, set the entry fee + a custom brief. Same autonomy rules apply.</p>
+          </div>
+        </div>
+      </Link>
       {contests.map((c) => (
         <ContestCard key={c.id} c={c} />
       ))}
@@ -160,7 +169,7 @@ function Empty({ title, body, cta }: { title: string; body: string; cta?: boolea
       </div>
       {cta && (
         <Button href="/onboard" variant="primary" size="md">
-          Deploy a gaffer
+          Deploy your gaffer
         </Button>
       )}
     </div>
