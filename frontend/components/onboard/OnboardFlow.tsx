@@ -127,13 +127,32 @@ export function OnboardFlow() {
       const walletClient = createWalletClient({ account: address, chain: ogGalileo, transport: custom(provider) });
       const pub = createPublicClient({ chain: ogGalileo, transport: http() });
 
+      // The 0G testnet RPC intermittently answers eth_getTransactionReceipt with a transient
+      // "no matching receipts found" error while a tx is still propagating — viem surfaces that as
+      // a throw, which would flag a tx that actually succeeded as failed. Poll through the noise:
+      // ignore not-found/RPC hiccups, and only ever treat a real revert as a failure.
+      const waitReceipt = async (hash: `0x${string}`) => {
+        for (let i = 0; i < 90; i++) {
+          try {
+            const r = await pub.getTransactionReceipt({ hash });
+            if (r) return r;
+          } catch {
+            /* not mined yet / flaky RPC — keep polling */
+          }
+          await new Promise((res) => setTimeout(res, 2000));
+        }
+        return null; // submitted & accepted, but the RPC never surfaced the receipt in time
+      };
+
       const createTx = await walletClient.writeContract({
         address: CONTRACT_ADDRESS,
         abi: managerAiAbi,
         functionName: "createAgent",
         args: [configHash],
       });
-      const createReceipt = await pub.waitForTransactionReceipt({ hash: createTx });
+      const createReceipt = await waitReceipt(createTx);
+      if (!createReceipt) throw new Error("createAgent submitted but not confirmed in time — check the explorer.");
+      if (createReceipt.status === "reverted") throw new Error("createAgent reverted onchain.");
       const created = parseEventLogs({ abi: managerAiAbi, eventName: "AgentCreated", logs: createReceipt.logs });
       const agentId = created[0]?.args.agentId;
       if (agentId == null) throw new Error("Agent created but id not found — check the explorer.");
@@ -146,7 +165,10 @@ export function OnboardFlow() {
         args: [BigInt(contestId), agentId],
         value: feeWei,
       });
-      await pub.waitForTransactionReceipt({ hash: tx });
+      // Only a genuine onchain revert is a failure. A transient RPC hiccup (or a receipt that never
+      // surfaces) is NOT — the tx was accepted, the pick fires, and the profile renders it live.
+      const entryReceipt = await waitReceipt(tx);
+      if (entryReceipt && entryReceipt.status === "reverted") throw new Error("Entry transaction reverted onchain.");
       setResult({ tx, configHash, agentId: Number(agentId) });
       // nudge the matchday action to pick this gaffer now (so its XI lands in ~1–2 min, not 6h)
       fetch("/api/pick-now", { method: "POST" }).catch(() => {});
