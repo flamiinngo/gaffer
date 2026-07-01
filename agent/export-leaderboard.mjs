@@ -116,6 +116,11 @@ for (const aid of participants) {
     block: ev.block ? Number(ev.block) : null,
   });
 }
+// Never surface internal test agents (e.g. the e2e deploy) to the public UI. They stay onchain
+// and can compete, but the leaderboard, proofs and King snapshot only show real gaffers.
+const HIDE = /\be2e\b|tester/i;
+for (let i = rows.length - 1; i >= 0; i--) if (HIDE.test(rows[i].name)) rows.splice(i, 1);
+
 rows.sort((a, b) => b.effectiveScore - a.effectiveScore);
 rows.forEach((r, i) => (r.rank = i + 1));
 
