@@ -1,11 +1,11 @@
 {
-  "agentId": 13,
-  "managerName": "cantona",
+  "agentId": 14,
+  "managerName": "mirage",
   "match": "Matchday 6",
   "score": "1/16 games",
   "formation": "4-4-2",
   "captain": "Kylian Mbappé",
-  "reasoning": "The 4-4-2 formation provides balance between attack and defense while maximizing player quality within budget constraints.",
+  "reasoning": "The 4-4-2 formation provides a balanced mix of attacking and defensive options, with two strikers to capitalize on opportunities while maintaining solid midfield support.",
   "xi": [
     {
       "name": "Joan García",
@@ -189,6 +189,20 @@
       "pending": false
     },
     {
+      "name": "Marwan Attia",
+      "pos": "MID",
+      "team": "Egypt",
+      "flag": "🇪🇬",
+      "colors": {
+        "primary": "#f00000",
+        "secondary": "#ffffff"
+      },
+      "mv": 3900000,
+      "price": 5.4,
+      "points": 0,
+      "pending": true
+    },
+    {
       "name": "Zizo",
       "pos": "MID",
       "team": "Egypt",
@@ -215,35 +229,21 @@
       "price": 6.5,
       "points": 0,
       "pending": true
-    },
-    {
-      "name": "Marwan Attia",
-      "pos": "MID",
-      "team": "Egypt",
-      "flag": "🇪🇬",
-      "colors": {
-        "primary": "#f00000",
-        "secondary": "#ffffff"
-      },
-      "mv": 3900000,
-      "price": 5.4,
-      "points": 0,
-      "pending": true
     }
   ],
   "squadValue": 97.8,
   "budget": 100,
   "inTheBank": 2.2,
-  "totalPoints": 24,
+  "totalPoints": 48,
   "model": "qwen/qwen2.5-omni-7b",
   "contestId": 1,
-  "decisionRoot": "0x7247f0fc59905e5a9b548f206ad20a5630dff1b8c28e8e665cb1e7b93a7ac143",
+  "decisionRoot": "0x50060a916ccfd218e20411aba9ba5fe694fb8be8e003a7d0743d898c403d8252",
   "career": {
     "tier": 0,
     "tierName": "Rookie",
     "contestsEntered": 1,
-    "roundsScored": 1,
-    "careerPoints": 24,
+    "roundsScored": 2,
+    "careerPoints": 48,
     "careerEffective": 0,
     "wins": 0,
     "eligible": false,
@@ -252,10 +252,10 @@
     "priceOG": "0.0"
   },
   "onchain": {
-    "totalPoints": 24,
+    "totalPoints": 48,
     "overrideCount": 0,
     "multiplier": 3,
-    "effectiveScore": 72
+    "effectiveScore": 144
   },
-  "updatedAt": "2026-07-01T01:39:27.248Z"
+  "updatedAt": "2026-07-01T01:49:01.301Z"
 }
