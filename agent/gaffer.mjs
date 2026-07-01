@@ -186,7 +186,7 @@ function cmdHelp() {
   log(`  ${C.b}run${C.x}                      autonomous cycle: pick → store on 0G → score → record`);
   log(`  ${C.b}override${C.x} --captain "X"   intervene (recorded onchain, drops your multiplier)`);
   log(`  ${C.b}status${C.x}                   your gaffer's standing`);
-  log(`\n  ${C.dim}Same arena as gaffer.app. Stay hands-off → up to 3x. Meddle → it's detected on 0G.${C.x}\n`);
+  log(`\n  ${C.dim}Same arena as gafferai.xyz. Stay hands-off → up to 3x. Meddle → it's detected on 0G.${C.x}\n`);
 }
 
 const cmd = process.argv[2];
