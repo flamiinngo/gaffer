@@ -1,249 +1,26 @@
 {
-  "agentId": 2,
-  "managerName": "The Catenaccio Kid",
+  "agentId": 13,
+  "managerName": "Unknown gaffer",
   "match": "Matchday 6",
   "score": "1/16 games",
-  "formation": "4-4-2",
-  "captain": "Erling Haaland",
-  "reasoning": "The 4-4-2 formation provides a solid balance of defense and attack while maintaining flexibility. This setup allows for strong defensive coverage and can transition quickly into attacking plays.",
-  "xi": [
-    {
-      "name": "Joan García",
-      "pos": "GK",
-      "team": "Spain",
-      "flag": "🇪🇸",
-      "colors": {
-        "primary": "#cc0000",
-        "secondary": "#ffffff"
-      },
-      "mv": 46000000,
-      "price": 6.5,
-      "points": 0,
-      "captain": false,
-      "pending": true
-    },
-    {
-      "name": "Sidny Lopes Cabral",
-      "pos": "DEF",
-      "team": "Cabo Verde",
-      "flag": "🇨🇻",
-      "colors": {
-        "primary": "#21418e",
-        "secondary": "#ff0000"
-      },
-      "mv": 4099999,
-      "price": 5.5,
-      "points": 0,
-      "captain": false,
-      "pending": true
-    },
-    {
-      "name": "Lucas Herrington",
-      "pos": "DEF",
-      "team": "Australia",
-      "flag": "🇦🇺",
-      "colors": {
-        "primary": "#ffcc00",
-        "secondary": "#2d324b"
-      },
-      "mv": 4900000,
-      "price": 5.6,
-      "points": 0,
-      "captain": false,
-      "pending": true
-    },
-    {
-      "name": "Alistair Johnston",
-      "pos": "DEF",
-      "team": "Canada",
-      "flag": "🇨🇦",
-      "colors": {
-        "primary": "#ff0000",
-        "secondary": "#ffffff"
-      },
-      "mv": 7600000,
-      "price": 6,
-      "points": 6,
-      "captain": false,
-      "pending": false
-    },
-    {
-      "name": "Willian Pacho",
-      "pos": "DEF",
-      "team": "Ecuador",
-      "flag": "🇪🇨",
-      "colors": {
-        "primary": "#ffff00",
-        "secondary": "#000063"
-      },
-      "mv": 76000000,
-      "price": 8.5,
-      "points": 0,
-      "captain": false,
-      "pending": true
-    },
-    {
-      "name": "Oswin Appollis",
-      "pos": "MID",
-      "team": "South Africa",
-      "flag": "🇿🇦",
-      "colors": {
-        "primary": "#ffd800",
-        "secondary": "#008040"
-      },
-      "mv": 2700000,
-      "price": 5.2,
-      "points": 2,
-      "captain": false,
-      "pending": false
-    },
-    {
-      "name": "Hélio Varela",
-      "pos": "MID",
-      "team": "Cabo Verde",
-      "flag": "🇨🇻",
-      "colors": {
-        "primary": "#21418e",
-        "secondary": "#ff0000"
-      },
-      "mv": 2600000,
-      "price": 5.2,
-      "points": 0,
-      "captain": false,
-      "pending": true
-    },
-    {
-      "name": "Relebohile Mofokeng",
-      "pos": "MID",
-      "team": "South Africa",
-      "flag": "🇿🇦",
-      "colors": {
-        "primary": "#ffd800",
-        "secondary": "#008040"
-      },
-      "mv": 2900000,
-      "price": 5.2,
-      "points": 1,
-      "captain": false,
-      "pending": false
-    },
-    {
-      "name": "Telmo Arcanjo",
-      "pos": "MID",
-      "team": "Cabo Verde",
-      "flag": "🇨🇻",
-      "colors": {
-        "primary": "#21418e",
-        "secondary": "#ff0000"
-      },
-      "mv": 2900000,
-      "price": 5.2,
-      "points": 0,
-      "captain": false,
-      "pending": true
-    },
-    {
-      "name": "Erling Haaland",
-      "pos": "FWD",
-      "team": "Norway",
-      "flag": "🇳🇴",
-      "colors": {
-        "primary": "#ef2b2d",
-        "secondary": "#001f5b"
-      },
-      "mv": 218000000,
-      "price": 14,
-      "points": 0,
-      "captain": true,
-      "pending": true
-    },
-    {
-      "name": "Iqraam Rayners",
-      "pos": "FWD",
-      "team": "South Africa",
-      "flag": "🇿🇦",
-      "colors": {
-        "primary": "#ffd800",
-        "secondary": "#008040"
-      },
-      "mv": 2600000,
-      "price": 5.2,
-      "points": 1,
-      "captain": false,
-      "pending": false
-    }
-  ],
-  "bench": [
-    {
-      "name": "Axel Tuanzebe",
-      "pos": "DEF",
-      "team": "DR Congo",
-      "flag": "🇨🇩",
-      "colors": {
-        "primary": "#007fff",
-        "secondary": "#f8181e"
-      },
-      "mv": 4600000,
-      "price": 5.5,
-      "points": 0,
-      "pending": true
-    },
-    {
-      "name": "Mohamed Salah",
-      "pos": "MID",
-      "team": "Egypt",
-      "flag": "🇪🇬",
-      "colors": {
-        "primary": "#f00000",
-        "secondary": "#ffffff"
-      },
-      "mv": 21000000,
-      "price": 7.3,
-      "points": 0,
-      "pending": true
-    },
-    {
-      "name": "Yasin Ayari",
-      "pos": "MID",
-      "team": "Sweden",
-      "flag": "🇸🇪",
-      "colors": {
-        "primary": "#ffcc00",
-        "secondary": "#0000ff"
-      },
-      "mv": 32000000,
-      "price": 8.1,
-      "points": 0,
-      "pending": true
-    },
-    {
-      "name": "Diogo Costa",
-      "pos": "GK",
-      "team": "Portugal",
-      "flag": "🇵🇹",
-      "colors": {
-        "primary": "#cc0000",
-        "secondary": "#66cc66"
-      },
-      "mv": 42000000,
-      "price": 6.5,
-      "points": 0,
-      "pending": true
-    }
-  ],
-  "squadValue": 99.5,
-  "budget": 100,
-  "inTheBank": 0.5,
-  "totalPoints": 10,
-  "model": "qwen/qwen2.5-omni-7b",
+  "formation": "4-3-3",
+  "captain": "—",
+  "reasoning": "",
+  "xi": [],
+  "bench": [],
+  "squadValue": null,
+  "budget": null,
+  "inTheBank": null,
+  "totalPoints": 24,
+  "model": "0G Compute",
   "contestId": 1,
-  "decisionRoot": "0xaf9ea6f748b99df7fa681fea0571a81d37cf7696661678cf5a533d98e242e9f0",
+  "decisionRoot": "",
   "career": {
     "tier": 0,
     "tierName": "Rookie",
     "contestsEntered": 1,
     "roundsScored": 1,
-    "careerPoints": 10,
+    "careerPoints": 24,
     "careerEffective": 0,
     "wins": 0,
     "eligible": false,
@@ -252,10 +29,10 @@
     "priceOG": "0.0"
   },
   "onchain": {
-    "totalPoints": 10,
-    "overrideCount": 1,
-    "multiplier": 2.75,
-    "effectiveScore": 27
+    "totalPoints": 24,
+    "overrideCount": 0,
+    "multiplier": 3,
+    "effectiveScore": 72
   },
-  "updatedAt": "2026-07-01T01:08:05.528Z"
+  "updatedAt": "2026-07-01T01:21:10.670Z"
 }
